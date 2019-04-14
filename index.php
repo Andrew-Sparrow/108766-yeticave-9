@@ -1,7 +1,10 @@
 <?php
 $is_auth = rand(0, 1);
 $user_name = "Андрей"; // укажите здесь ваше имя
+
+$arr_categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -55,9 +58,15 @@ $user_name = "Андрей"; // укажите здесь ваше имя
         горнолыжное снаряжение.</p>
       <ul class="promo__list">
         <!--заполните этот список из массива категорий-->
+        <?php foreach($arr_categories as $var): ?>
+        <?php if (isset($var)): ?>
         <li class="promo__item promo__item--boards">
-          <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
+          <a class="promo__link" href="pages/all-lots.html">
+            <?=strip_tags($var);?>
+          </a>
         </li>
+        <?php endif; ?>
+        <?php endforeach; ?>
       </ul>
     </section>
     <section class="lots">
@@ -68,7 +77,7 @@ $user_name = "Андрей"; // укажите здесь ваше имя
         <!--заполните этот список из массива с товарами-->
         <li class="lots__item lot">
           <div class="lot__image">
-            <img src="" width="350" height="260" alt="">
+            <img src="#" width="350" height="260" alt="">
           </div>
           <div class="lot__info">
             <span class="lot__category">Название категории</span>
@@ -93,9 +102,15 @@ $user_name = "Андрей"; // укажите здесь ваше имя
   <nav class="nav">
     <ul class="nav__list container">
       <!--заполните этот список из массива категорий-->
+      <?php foreach($arr_categories as $var): ?>
+      <?php if (isset($var)): ?>
       <li class="nav__item">
-        <a href="pages/all-lots.html">Название категории</a>
+        <a href="pages/all-lots.html">
+          <?=strip_tags($var)?>
+        </a>
       </li>
+      <?php endif;?>
+      <?php endforeach;?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">
