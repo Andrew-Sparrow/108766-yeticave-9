@@ -158,13 +158,11 @@ $arr_lot = [
     <ul class="nav__list container">
       <!--заполните этот список из массива категорий-->
       <?php foreach($arr_categories as $var): ?>
-      <?php if (isset($var)): ?>
       <li class="nav__item">
         <a href="pages/all-lots.html">
           <?=strip_tags($var)?>
         </a>
       </li>
-      <?php endif;?>
       <?php endforeach;?>
     </ul>
   </nav>
