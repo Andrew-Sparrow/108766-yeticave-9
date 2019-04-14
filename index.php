@@ -98,13 +98,11 @@ $arr_lot = [
       <ul class="promo__list">
         <!--заполните этот список из массива категорий-->
         <?php foreach($arr_categories as $var): ?>
-        <?php if (isset($var)): ?>
         <li class="promo__item promo__item--boards">
           <a class="promo__link" href="pages/all-lots.html">
             <?=strip_tags($var);?>
           </a>
         </li>
-        <?php endif; ?>
         <?php endforeach; ?>
       </ul>
     </section>
@@ -115,24 +113,17 @@ $arr_lot = [
       <ul class="lots__list">
         <!--заполните этот список из массива с товарами-->
         <?php foreach($arr_lot as $item): ?>
-        <?php if (isset($item)): ?>
           <li class="lots__item lot">
             <div class="lot__image">
-              <?php if(isset($item['img_src'])):?>
               <img src="<?=strip_tags($item['img_src']); ?>" width="350" height="260" alt="">
-              <?php endif;?>
             </div>
             <div class="lot__info">
-              <?php if (isset($item['category'])): ?>
-              <span class="lot__category"><?=$item['category'] ?></span>
-              <?php endif; ?>
-              <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=$item['title'] ?></a></h3>
+              <span class="lot__category"><?=strip_tags($item['category']) ?></span>
+              <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=strip_tags($item['title']) ?></a></h3>
               <div class="lot__state">
                 <div class="lot__rate">
                   <span class="lot__amount">Стартовая цена</span>
-                  <?php if(isset($item['price'])): ?>
                   <span class="lot__cost"><?=$item['price'] ?><b class="rub">р</b></span>
-                  <?php endif;?>
                 </div>
                 <div class="lot__timer timer">
                   12:23
@@ -140,7 +131,6 @@ $arr_lot = [
               </div>
             </div>
           </li>
-        <?php endif;?>
         <?php endforeach ;?>
       </ul>
     </section>
