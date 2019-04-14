@@ -115,15 +115,31 @@ $arr_lot = [
         <?php foreach($arr_lot as $item): ?>
           <li class="lots__item lot">
             <div class="lot__image">
+              <?php if(isset($item['img_src'])):?>     <!--#4 property-->
               <img src="<?=strip_tags($item['img_src']); ?>" width="350" height="260" alt="">
+              <?php endif;?>
             </div>
             <div class="lot__info">
-              <span class="lot__category"><?=strip_tags($item['category']) ?></span>
-              <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=strip_tags($item['title']) ?></a></h3>
+              <?php if (isset($item['category'])): ?>  <!--#2 property-->
+              <span class="lot__category">
+                <?=strip_tags($item['category']) ?>
+              </span>
+              <?php endif; ?>
+              <h3 class="lot__title">
+                <?php if (isset($item['title'])): ?>    <!--#1 property-->
+                <a class="text-link" href="pages/lot.html">
+                  <?=strip_tags($item['title']) ?>
+                </a>
+                <?php endif;?>
+              </h3>
               <div class="lot__state">
                 <div class="lot__rate">
                   <span class="lot__amount">Стартовая цена</span>
-                  <span class="lot__cost"><?=$item['price'] ?><b class="rub">р</b></span>
+                  <?php if(isset($item['price'])): ?>   <!--#3 property-->
+                  <span class="lot__cost">
+                    <?=$item['price'] ?><b class="rub">р</b>
+                  </span>
+                  <?php endif;?>
                 </div>
                 <div class="lot__timer timer">
                   12:23
