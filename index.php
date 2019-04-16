@@ -41,7 +41,25 @@ $arr_lot = [
     'price' => 5400,
     'img_src' => 'img/lot-6.jpg'
   ]
-];
+] ;
+
+/**
+ * This function returns a formated string with groups of thousands and sign of ruble
+ * in the end.
+ *
+ * @param int $number
+ *
+ * @return string
+ */
+function format_number($number): string {
+  
+  $number = ceil($number);
+  
+  if($number > 1000) {
+     $number = number_format($number, 0, "."," ");
+  }
+  return $number." ₽";
+}
 ?>
 
 <!DOCTYPE html>
@@ -137,7 +155,7 @@ $arr_lot = [
                   <span class="lot__amount">Стартовая цена</span>
                   <?php if(isset($item['price'])): ?>   <!--#3 property-->
                   <span class="lot__cost">
-                    <?=$item['price'] ?><b class="rub">р</b>
+                    <?=format_number($item['price'])?>
                   </span>
                   <?php endif;?>
                 </div>
