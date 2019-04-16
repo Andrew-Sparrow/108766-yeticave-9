@@ -41,14 +41,17 @@ $arr_lot = [
     'price' => 5400,
     'img_src' => 'img/lot-6.jpg'
   ]
-];
+] ;
 
 /**
- * @param $number
  * This function returns a formated string with groups of thousands and sign of ruble
  * in the end.
+ *
+ * @param int $number
+ *
+ * @return string
  */
-function format_number($number): string{
+function format_number($number): string {
   
   $number = ceil($number);
   
