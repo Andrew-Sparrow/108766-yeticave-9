@@ -7,7 +7,7 @@
         горнолыжное снаряжение.</p>
       <ul class="promo__list">
         <!--заполните этот список из массива категорий-->
-        <?php foreach($arr_categories as $var): ?>
+        <?php foreach($categories as $var): ?>
         <li class="promo__item promo__item--boards">
           <a class="promo__link" href="pages/all-lots.html">
             <?=strip_tags($var);?>
@@ -22,7 +22,7 @@
       </div>
       <ul class="lots__list">
         <!--заполните этот список из массива с товарами-->
-        <?php foreach($arr_lot as $item): ?>
+        <?php foreach($lots as $item): ?>
           <li class="lots__item lot">
             <div class="lot__image">
               <?php if(isset($item['img_src'])):?>     <!--#4 property-->

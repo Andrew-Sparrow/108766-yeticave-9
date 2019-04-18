@@ -4,14 +4,16 @@ require_once("helpers.php");
 $user_name = "Андрей"; // укажите здесь ваше имя
 $title     = "Главная";
 
-$arr_categories = ["Доски и лыжи",
-                   "Крепления",
-                   "Ботинки",
-                   "Одежда",
-                   "Инструменты",
-                   "Разное"];
+$categories = [
+  "Доски и лыжи",
+  "Крепления",
+  "Ботинки",
+  "Одежда",
+  "Инструменты",
+  "Разное"
+];
 
-$arr_lot = [
+$lots = [
   [
     'title'    => '2014 Rossignol District Snowboard',
     'category' => 'Доски и лыжи',
@@ -69,13 +71,24 @@ function format_number($number): string {
   return $number . " ₽";
 }
 
-$main_content = include_template("index.php", ["arr_categories" => $arr_categories,
-                                               "arr_lot"        => $arr_lot]);
+$main_content = include_template(
+  "index.php",
+  [
+    "categories" => $categories,
+    "lots"       => $lots
+  ]
+);
 
-$layout = include_template("layout.php", ["main_content"   => $main_content,
-                                          "arr_categories" => $arr_categories,
-                                          "user_name"      => $user_name,
-                                          "title"          => $title]);
+
+$layout = include_template(
+  "layout.php",
+  [
+    "main_content" => $main_content,
+    "categories"   => $categories,
+    "user_name"    => $user_name,
+    "title"        => $title
+  ]
+);
 
 print($layout);
 
