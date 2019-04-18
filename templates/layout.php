@@ -57,7 +57,7 @@ $is_auth = 1;
   <nav class="nav">
     <ul class="nav__list container">
       <!--заполните этот список из массива категорий-->
-      <?php foreach($arr_categories as $var): ?>
+      <?php foreach($categories as $var): ?>
         <li class="nav__item">
           <a href="pages/all-lots.html">
             <?= strip_tags($var) ?>
