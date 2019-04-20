@@ -1,5 +1,10 @@
 <?php
 require_once("helpers.php");
+require_once("date_functions.php");
+
+setlocale(LC_ALL, 'ru_RU');
+
+set_timezone("Asia/Yekaterinburg");
 
 $user_name = "Андрей"; // укажите здесь ваше имя
 $title     = "Главная";

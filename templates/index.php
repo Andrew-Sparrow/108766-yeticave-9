@@ -1,13 +1,6 @@
 <?php
-date_default_timezone_set("Asia/Yekaterinburg");
-setlocale(LC_ALL, 'ru_RU');
 
-$current_time      = time(); // unix timestamp
-$tomorrow_midnight = strtotime("tomorrow");
-
-$difference = floor(($tomorrow_midnight - $current_time) / 60); //get minutes
-
-$formatted_time = strftime("%H:%M", $current_time);
+require_once ("date_functions.php");
 
 ?>
 
@@ -62,8 +55,8 @@ $formatted_time = strftime("%H:%M", $current_time);
               <?php endif; ?>
             </div>
             <div class="lot__timer timer
-              <?php echo($difference <= 60) ? "timer--finishing" : "" ?> ">
-              <?= $formatted_time?>
+              <?php echo(validate_less_hour(strtotime("tomorrow"))) ? "timer--finishing" : "" ?> ">
+              <?= get_formatted_time(strtotime("tomorrow"))?>
             </div>
           </div>
         </div>
