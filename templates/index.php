@@ -55,7 +55,7 @@ require_once ("date_functions.php");
               <?php endif; ?>
             </div>
             <div class="lot__timer timer
-              <?php echo(validate_less_hour(strtotime("tomorrow"))) ? "timer--finishing" : "" ?> ">
+              <?php echo validate_less_hour(strtotime("tomorrow")) ? "timer--finishing" : "" ?> ">
               <?= get_formatted_time(strtotime("tomorrow"))?>
             </div>
           </div>

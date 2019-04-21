@@ -1,13 +1,11 @@
 <?php
 
-
 /**
  * This function sets default timezone
  *
  * @param string $timezone
  *
  */
-
 function set_timezone($timezone) {
   date_default_timezone_set($timezone);
 }
@@ -21,7 +19,6 @@ function set_timezone($timezone) {
  * @return boolean
  *
  */
-
 function validate_less_hour($end_bargaining): bool {
   
   $current_time = time(); // unix timestamp
@@ -35,6 +32,7 @@ function validate_less_hour($end_bargaining): bool {
   return false;
 }
 
+
 /**
  * This function returns remained time in "Hours:minutes"
  *
@@ -42,7 +40,6 @@ function validate_less_hour($end_bargaining): bool {
  * @return string
  *
  */
-
 function get_formatted_time($end_bargaining) {
   
   $current_time = time(); // unix timestamp
