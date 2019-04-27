@@ -54,12 +54,13 @@ select title from categories ;
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название,
  стартовую цену, ссылку на изображение, цену, название категории;*/
-SELECT lots.title as lot_title, any_value(start_price) as start_price , any_value(image) as link, MAX(rate) as max_rate, any_value(categories.title) AS category
+SELECT lots.title as lot_title, start_price as start_price , image as link, MAX(rate) as max_rate, categories.title AS category
 FROM lots
 JOIN categories ON lots.category_id = categories.id
 left JOIN rates ON lots.category_id = rates.lot_id
-WHERE lots.winner_id IS NULL AND lots.dt_add >= CURDATE()
-GROUP BY lots.title
+WHERE lots.winner_id IS NULL AND lots.end_date >= CURDATE()
+GROUP BY  lots.id
+ORDER BY lots.dt_add
 LIMIT 4;
 
 #показать лот по его id. Получите также название категории, к которой принадлежит лот;
@@ -71,10 +72,10 @@ JOIN categories ON categories.id = lots.category_id;
 update lots set title = 'Ботинки для сноуборда DC Mutiny Charocal' where id = 4;
 
 #получить список самых свежих ставок для лота по его идентификатору.
-select rates.id AS rate_id, rates.dt_add AS data_rate, rate AS rate  #добавил поле с датой, что бы видно было время ставки
+SELECT rates.id AS rate_id, rates.dt_add AS data_rate, rate AS rate  #добавил поле с датой, что бы видно было время ставки
 FROM rates
-WHERE lot_id = 1 AND rates.dt_add > '2019-04-25 23:40:00'
-order by rates.dt_add desc
-;
+WHERE lot_id = 1
+ORDER BY rates.dt_add desc
+LIMIT 3 ;
 
 
