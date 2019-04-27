@@ -60,7 +60,7 @@ JOIN categories ON lots.category_id = categories.id
 left JOIN rates ON lots.category_id = rates.lot_id
 WHERE lots.winner_id IS NULL AND lots.end_date >= CURDATE()
 GROUP BY  lots.id
-ORDER BY lots.dt_add
+ORDER BY lots.dt_add desc
 LIMIT 4;
 
 #показать лот по его id. Получите также название категории, к которой принадлежит лот;
