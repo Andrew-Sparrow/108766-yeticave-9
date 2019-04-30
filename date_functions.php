@@ -54,3 +54,69 @@ function get_formatted_time($end_bargaining) {
   return $remained_time;
 }
 
+/**
+ * This function returns a formated string with groups of thousands and sign of ruble
+ * in the end.
+ *
+ * @param int $number
+ *
+ * @return string
+ */
+function format_number($number): string {
+  
+  $number = ceil($number);
+  
+  if($number > 1000) {
+    $number = number_format($number, 0, ".", " ");
+  }
+  return $number . " ₽";
+}
+
+/**
+ * Fetches all result rows as an associative array,
+ *
+ * @param $link mysqli an object which represents the connection to a MySQL Server.
+ * @param $sql string This parameter can include one or more
+ *        parameter markers in the SQL statement by embedding
+ *        question mark (?) characters at the appropriate positions.
+ * @param $data an array of prepared variables for bindig this variables
+ *        to a prepared statement
+ * @return an array
+ */
+function db_fetch_data ($link, $sql, $data = []): mixed {
+  $result = [];
+  $stmt = db_get_prepare_stmt($link, $sql, $data);
+  mysqli_stmt_execute($stmt);
+  $res = mysqli_stmt_get_result($stmt);
+  
+  if ($res) {
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+  }
+  return $result;
+}
+
+/**
+ * This function adds new rows
+ *
+ * @param $link mysqli an object which represents the connection to a MySQL Server.
+ * @param $sql string This parameter can include one or more
+ *        parameter markers in the SQL statement by embedding
+ *        question mark (?) characters at the appropriate positions.
+ * @param $data an array of prepared variables for bindig this variables
+ *        to a prepared statement
+ * @return Returns the auto generated id
+ */
+function db_insert_data ($link, $sql, $data = []): mixed {
+  $stmt = db_get_prepare_stmt($link, $sql, $data);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  
+  if ($result) {
+    $result = mysqli_insert_id($link);
+  }
+  return $result;
+}
+
+
+
+

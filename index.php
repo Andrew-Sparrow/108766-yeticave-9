@@ -1,86 +1,75 @@
 <?php
 require_once("helpers.php");
 require_once("date_functions.php");
+require_once("init.php");
 
 set_timezone("Asia/Yekaterinburg");
 
 $user_name = "Андрей"; // укажите здесь ваше имя
-$title     = "Главная";
+$title = "Главная";
 
-$categories = [
-  "Доски и лыжи",
-  "Крепления",
-  "Ботинки",
-  "Одежда",
-  "Инструменты",
-  "Разное"
-];
+$categories = [];
+$lots = [];
+$error = '';
+$main_content = '';
+$categories_content = '';
 
-$lots = [
-  [
-    'title'    => '2014 Rossignol District Snowboard',
-    'category' => 'Доски и лыжи',
-    'price'    => 10999,
-    'img_src'  => 'img/lot-1.jpg'
-  ],
-  [
-    'title'    => 'DC Ply Mens 2016/2017 Snowboard',
-    'category' => 'Доски и лыжи',
-    'price'    => 159999,
-    'img_src'  => 'img/lot-2.jpg'
-  ],
-  [
-    'title'    => 'Крепления Union Contact Pro 2015 года размер L/XL',
-    'category' => 'Крепления',
-    'price'    => 8000,
-    'img_src'  => 'img/lot-3.jpg'
-  ],
-  [
-    'title'    => 'Ботинки для сноуборда DC Mutiny Charocal',
-    'category' => 'Ботинки',
-    'price'    => 10999,
-    'img_src'  => 'img/lot-4.jpg'
-  ],
-  [
-    'title'    => 'Куртка для сноуборда DC Mutiny Charocal',
-    'category' => 'Одежда',
-    'price'    => 7500,
-    'img_src'  => 'img/lot-5.jpg'
-  ],
-  [
-    'title'    => 'Маска Oakley Canopy',
-    'category' => 'Разное',
-    'price'    => 5400,
-    'img_src'  => 'img/lot-6.jpg'
-  ]
-];
-
-
-/**
- * This function returns a formated string with groups of thousands and sign of ruble
- * in the end.
- *
- * @param int $number
- *
- * @return string
- */
-function format_number($number): string {
+// запрос на отображение категорий
+if(!$connection) {
+  $error = mysqli_connect_error();
+  $categories_content = include_template('error.php', ['error' => $error]);
+}
+else {
+  $sql = 'SELECT id, title, symbol_code FROM categories';
+  $result_categories = mysqli_query($connection, $sql);
   
-  $number = ceil($number);
-  
-  if($number > 1000) {
-    $number = number_format($number, 0, ".", " ");
+  if($result_categories) {
+    $categories = mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
+    
+    $categories_content = include_template(
+      "categories_content.php",
+      [
+        "categories" => $categories
+      ]
+    );
   }
-  return $number . " ₽";
+  else {
+    $error = mysqli_error($connection);
+    $categories_content = include_template('error.php', ['error' => $error]);
+  }
 }
 
-$main_content = include_template(
-  "index.php",
-  [
-    "categories" => $categories,
-    "lots"       => $lots
-  ]
-);
+
+//запрос на отображение лотов
+if(!$connection) {
+  $error = mysqli_connect_error();
+  $main_content = include_template('error.php', ['error' => $error]);
+}
+else {
+  
+  $sql_lots = 'SELECT lots.id, lots.title as lot_title, /*categories.title as categories_title,*/ start_price , img_src
+          FROM lots
+          /*JOIN categories on lots.category_id = categories.id*/
+          LIMIT 6';
+  
+  $result_lots = mysqli_query($connection, $sql_lots);
+  
+  if($result_lots) {
+    $lots = mysqli_fetch_all($result_lots, MYSQLI_ASSOC);
+    
+    $main_content = include_template(
+      "main.php",
+      [
+        /*"categories" => $categories,*/
+        "lots"       => $lots
+      ]
+    );
+  }
+  else {
+    $error = mysqli_error($connection);
+    $main_content = include_template('error.php', ['error' => $error]);
+  }
+}
 
 
 $layout = include_template(

@@ -7,7 +7,7 @@ use yetiDB;
 create table categories (
   id INT auto_increment primary key ,
   title CHAR(64) not null unique ,
-  code  CHAR(64) not null unique
+  symbol_code  CHAR(64) not null unique
 ) ;
 
 create table users (
@@ -16,7 +16,7 @@ create table users (
   email CHAR(128) not null unique ,
   name CHAR(128) not null unique ,
   password CHAR(64) not null ,
-  image VARCHAR(2083),
+  avatar VARCHAR(2083),
   contact VARCHAR(2083)  not null,
   INDEX name_index (name),
   INDEX email_index(email)
@@ -27,7 +27,7 @@ create table lots (
   dt_add DATETIME default CURRENT_TIMESTAMP,
   title CHAR(64) not null ,
   description TEXT not null ,
-  image VARCHAR(2083) not null ,
+  img_src VARCHAR(2083) not null ,
   start_price INT not null ,
   end_date DATE not null ,
   step SMALLINT not null,

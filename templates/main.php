@@ -1,23 +1,12 @@
 <?php
-
-require_once ("date_functions.php");
-
+require_once("date_functions.php");
 ?>
 
 <section class="promo">
   <h2 class="promo__title">Нужен стафф для катки?</h2>
   <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и
     горнолыжное снаряжение.</p>
-  <ul class="promo__list">
-    <!--заполните этот список из массива категорий-->
-    <?php foreach($categories as $var): ?>
-      <li class="promo__item promo__item--boards">
-        <a class="promo__link" href="pages/all-lots.html">
-          <?= strip_tags($var); ?>
-        </a>
-      </li>
-    <?php endforeach; ?>
-  </ul>
+  <?= $categories_content ?>
 </section>
 <section class="lots">
   <div class="lots__header">
@@ -33,24 +22,24 @@ require_once ("date_functions.php");
           <?php endif; ?>
         </div>
         <div class="lot__info">
-          <?php if(isset($item['category'])): ?>  <!--#2 property-->
+          <?php if(isset($item['categories_title'])): ?>  <!--#2 property-->
             <span class="lot__category">
-                <?= strip_tags($item['category']) ?>
+                <?= strip_tags($item['categories_title']) ?>
               </span>
           <?php endif; ?>
           <h3 class="lot__title">
-            <?php if(isset($item['title'])): ?>    <!--#1 property-->
+            <?php if(isset($item['lot_title'])): ?>    <!--#1 property-->
               <a class="text-link" href="pages/lot.html">
-                <?= strip_tags($item['title']) ?>
+                <?= strip_tags($item['lot_title']) ?>
               </a>
             <?php endif; ?>
           </h3>
           <div class="lot__state">
             <div class="lot__rate">
               <span class="lot__amount">Стартовая цена</span>
-              <?php if(isset($item['price'])): ?>   <!--#3 property-->
+              <?php if(isset($item['start_price'])): ?>   <!--#3 property-->
                 <span class="lot__cost">
-                    <?= format_number($item['price']) ?>
+                    <?= format_number(intval($item['start_price'])) ?>
                   </span>
               <?php endif; ?>
             </div>
