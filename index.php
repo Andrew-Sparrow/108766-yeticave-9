@@ -15,8 +15,12 @@ $main_content = '';
 $categories_content = '';
 $categories_content_footer = '';
 
-// запрос на отображение категорий
 
+ /*я пытался уменьшить блоки if-else'ы, с помощью самописной функции get_content()
+ из date_functions.php
+ */
+
+// запрос на отображение категорий
 if(!$connection) {
   $error = mysqli_connect_error();
   $categories_content = $categories_content_footer = include_template('error.php', ['error' => $error]);
