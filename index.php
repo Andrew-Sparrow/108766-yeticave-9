@@ -16,7 +16,7 @@ $categories_content = '';
 $categories_content_footer = '';
 
 
- /*я пытался уменьшить блоки if-else'ы, с помощью самописной функции get_content()
+ /*я пытался уменьшить блоки if-else'ы, с помощью недописанной функции get_content()
  из date_functions.php
  */
 
