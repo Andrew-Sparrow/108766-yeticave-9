@@ -55,16 +55,7 @@ $is_auth = 1;
 
 <footer class="main-footer">
   <nav class="nav">
-    <ul class="nav__list container">
-      <!--заполните этот список из массива категорий-->
-      <?php foreach($categories as $var): ?>
-        <li class="nav__item">
-          <a href="pages/all-lots.html">
-            <?= strip_tags($var['title']) ?>
-          </a>
-        </li>
-      <?php endforeach; ?>
-    </ul>
+    <?= $categories_content_footer ?>
   </nav>
   <div class="main-footer__bottom container">
     <div class="main-footer__copyright">

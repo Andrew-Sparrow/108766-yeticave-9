@@ -13,32 +13,31 @@ $lots = [];
 $error = '';
 $main_content = '';
 $categories_content = '';
+$categories_content_footer = '';
 
 // запрос на отображение категорий
+
 if(!$connection) {
   $error = mysqli_connect_error();
-  $categories_content = include_template('error.php', ['error' => $error]);
+  $categories_content = $categories_content_footer = include_template('error.php', ['error' => $error]);
 }
 else {
   $sql = 'SELECT id, title, symbol_code FROM categories';
   $result_categories = mysqli_query($connection, $sql);
   
   if($result_categories) {
+    
+    // возвращает массив категорий
     $categories = mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
     
-    $categories_content = include_template(
-      "categories_content.php",
-      [
-        "categories" => $categories
-      ]
-    );
+    $categories_content = include_template("categories_content.php", ["categories" => $categories]);
+    $categories_content_footer = include_template("categories_content_footer.php", ["categories" => $categories]);
   }
   else {
     $error = mysqli_error($connection);
-    $categories_content = include_template('error.php', ['error' => $error]);
+    $categories_content = $categories_content_footer = include_template('error.php', ['error' => $error]);
   }
 }
-
 
 //запрос на отображение лотов
 if(!$connection) {
@@ -47,10 +46,9 @@ if(!$connection) {
 }
 else {
   
-  $sql_lots = 'SELECT lots.id, lots.title as lot_title, /*categories.title as categories_title,*/ start_price , img_src
-          FROM lots
-          /*JOIN categories on lots.category_id = categories.id*/
-          LIMIT 6';
+  $sql_lots = 'SELECT lots.id, lots.title as lot_title, start_price , img_src
+              FROM lots
+              LIMIT 6';
   
   $result_lots = mysqli_query($connection, $sql_lots);
   
@@ -60,8 +58,8 @@ else {
     $main_content = include_template(
       "main.php",
       [
-        /*"categories" => $categories,*/
-        "lots"       => $lots
+        "categories_content" => $categories_content,
+        "lots" => $lots
       ]
     );
   }
@@ -76,7 +74,7 @@ $layout = include_template(
   "layout.php",
   [
     "main_content" => $main_content,
-    "categories"   => $categories,
+    "categories_content_footer" => $categories_content_footer,
     "user_name"    => $user_name,
     "title"        => $title
   ]

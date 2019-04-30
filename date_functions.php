@@ -46,10 +46,10 @@ function get_formatted_time($end_bargaining) {
   
   $difference = floor(($end_bargaining - $current_time));
   
-  $hours   = floor($difference / 3600); // remaining  hours
-  $minutes = floor(($difference - ($hours * 3600)) /60) ; // remaining  minutes
-
-  $remained_time = $hours.":".$minutes;
+  $hours = floor($difference / 3600); // remaining  hours
+  $minutes = floor(($difference - ($hours * 3600)) / 60); // remaining  minutes
+  
+  $remained_time = $hours . ":" . $minutes;
   
   return $remained_time;
 }
@@ -73,7 +73,7 @@ function format_number($number): string {
 }
 
 /**
- * Fetches all result rows as an associative array,
+ * Fetches all result rows as an associative array by prepared variables
  *
  * @param $link mysqli an object which represents the connection to a MySQL Server.
  * @param $sql string This parameter can include one or more
@@ -83,13 +83,13 @@ function format_number($number): string {
  *        to a prepared statement
  * @return an array
  */
-function db_fetch_data ($link, $sql, $data = []): mixed {
+function db_fetch_data($link, $sql, $data = []): mixed {
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
   mysqli_stmt_execute($stmt);
   $res = mysqli_stmt_get_result($stmt);
   
-  if ($res) {
+  if($res) {
     $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
   }
   return $result;
@@ -106,17 +106,45 @@ function db_fetch_data ($link, $sql, $data = []): mixed {
  *        to a prepared statement
  * @return Returns the auto generated id
  */
-function db_insert_data ($link, $sql, $data = []): mixed {
+function db_insert_data($link, $sql, $data = []): mixed {
   $stmt = db_get_prepare_stmt($link, $sql, $data);
   mysqli_stmt_execute($stmt);
   $result = mysqli_stmt_get_result($stmt);
   
-  if ($result) {
+  if($result) {
     $result = mysqli_insert_id($link);
   }
   return $result;
 }
 
+
+function get_content(mysqli $connection, string $sql, string $template_file,  $variable_name = []): string {
+  if(!$connection) {
+    $error = mysqli_connect_error();
+    $content = include_template('error.php', ['error' => $error]);
+  }
+  else {
+    
+    $query_result = mysqli_query($connection, $sql);
+    
+    if($query_result) {
+      
+      // возвращает массив
+      $array_content = mysqli_fetch_all($query_result, MYSQLI_ASSOC);
+      
+      foreach($variable_name as $var){
+      
+      }
+      
+      $content = include_template($template_file, [$variable_name => $$variable_name]);
+    }
+    else {
+      $error = mysqli_error($connection);
+      $content = include_template('error.php', ['error' => $error]);
+    }
+  }
+  return $content;
+}
 
 
 
