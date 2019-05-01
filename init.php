@@ -7,4 +7,3 @@ else {
   exit('Скопируйте config.default.php в config.php и установите настройки приложения');
 }
 
-$connection = DbConnectionProvider::getConnection();

@@ -1,4 +1,21 @@
 <?php
+class DbConnectionProvider
+{
+  protected static $connection;
+  
+  public static function getConnection() {
+    if(self::$connection === null) {
+      self::$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+      if(!self::$connection) {
+        exit('Ошибка MySQL: connection failed');
+      }
+      
+      mysqli_set_charset(self::$connection, 'utf8');
+    }
+    
+    return self::$connection;
+  }
+}
 
 /**
  * This function sets default timezone
@@ -83,7 +100,8 @@ function format_number($number): string {
  *        to a prepared statement
  * @return an array
  */
-function db_fetch_data($link, $sql, $data = []): mixed {
+function db_fetch_data($sql, $data = []) {
+  $link = DbConnectionProvider::getConnection();
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
   mysqli_stmt_execute($stmt);
@@ -106,7 +124,8 @@ function db_fetch_data($link, $sql, $data = []): mixed {
  *        to a prepared statement
  * @return Returns the auto generated id
  */
-function db_insert_data($link, $sql, $data = []): mixed {
+function db_insert_data($sql, $data = []) {
+  $link = DbConnectionProvider::getConnection();
   $stmt = db_get_prepare_stmt($link, $sql, $data);
   mysqli_stmt_execute($stmt);
   $result = mysqli_stmt_get_result($stmt);
@@ -117,34 +136,31 @@ function db_insert_data($link, $sql, $data = []): mixed {
   return $result;
 }
 
-
-function get_content(mysqli $connection, string $sql, string $template_file,  $variable_name = []): string {
-  if(!$connection) {
-    $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
-  }
-  else {
-    
-    $query_result = mysqli_query($connection, $sql);
-    
-    if($query_result) {
-      
-      // возвращает массив
-      $array_content = mysqli_fetch_all($query_result, MYSQLI_ASSOC);
-      
-      foreach($variable_name as $var){
-      
-      }
-      
-      $content = include_template($template_file, [$variable_name => $$variable_name]);
-    }
-    else {
-      $error = mysqli_error($connection);
-      $content = include_template('error.php', ['error' => $error]);
-    }
-  }
-  return $content;
+/**
+ * This returnes array of categories
+ *
+ * @return array of categories
+ */
+function get_categories() {
+  $sql = 'SELECT id, title, symbol_code FROM categories';
+  $categories = db_fetch_data($sql);
+  return $categories;
 }
+
+/**
+ * This returnes array of lots
+ *
+ * @return array of lots
+ */
+function get_lots() {
+  $sql = 'SELECT lots.id, lots.title as lot_title, start_price , img_src
+          FROM lots
+          LIMIT 6';
+  $lots = db_fetch_data($sql);
+  return $lots;
+}
+
+
 
 
 

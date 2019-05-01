@@ -56,7 +56,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
       }
       
       if($type) {
-        $types       .= $type;
+        $types      .= $type;
         $stmt_data[] = $value;
       }
     }
@@ -142,6 +142,3 @@ function include_template($name, array $data = []) {
   
   return $result;
 }
-
-
-
