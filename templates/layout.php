@@ -60,7 +60,7 @@ $is_auth = 1;
       <?php foreach($categories as $var): ?>
         <li class="nav__item">
           <a href="pages/all-lots.html">
-            <?= strip_tags($var) ?>
+            <?= strip_tags($var['title']) ?>
           </a>
         </li>
       <?php endforeach; ?>
