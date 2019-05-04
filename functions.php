@@ -79,7 +79,7 @@ function get_formatted_time($end_bargaining) {
  *
  * @return string
  */
-function format_number($number): string {
+function format_number_ruble($number): string {
   
   $number = ceil($number);
   
@@ -87,6 +87,22 @@ function format_number($number): string {
     $number = number_format($number, 0, ".", " ");
   }
   return $number . " ₽";
+}
+
+/**
+ * This function returns a formated string with groups of thousands
+ *
+ * @param int $number
+ *
+ * @return string
+ */
+function format_number($number): string {
+  $number = ceil($number);
+  
+  if($number > 1000) {
+    $number = number_format($number, 0, ".", " ");
+  }
+  return $number;
 }
 
 /**
@@ -137,7 +153,7 @@ function db_insert_data($sql, $data = []) {
 }
 
 /**
- * This returnes array of categories
+ * This function returns array of categories
  *
  * @return array of categories
  */
@@ -148,14 +164,13 @@ function get_categories() {
 }
 
 /**
- * This returnes array of lots
+ * This function returns array of lots
  *
  * @return array of lots
  */
 function get_lots() {
-  $sql = 'SELECT lots.id, lots.title as lot_title, start_price , img_src
-          FROM lots
-          LIMIT 6';
+  $sql = 'SELECT lots.id as lot_id, lots.title as lot_title, start_price , img_src
+          FROM lots';
   $lots = db_fetch_data($sql);
   return $lots;
 }

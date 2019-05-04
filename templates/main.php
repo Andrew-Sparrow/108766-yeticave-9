@@ -37,8 +37,8 @@ require_once("functions.php");
               </span>
           <?php endif; ?>
           <h3 class="lot__title">
-            <?php if(isset($item['lot_title'])): ?>    <!--#1 property-->
-              <a class="text-link" href="pages/lot.html">
+            <?php if(isset($item['lot_title']) && isset($item['lot_id'])): ?>    <!--#1 property-->
+              <a class="text-link" href="lot.php?id=<?=strip_tags($item['lot_id']) ?>">
                 <?= strip_tags($item['lot_title']) ?>
               </a>
             <?php endif; ?>
@@ -48,7 +48,7 @@ require_once("functions.php");
               <span class="lot__amount">Стартовая цена</span>
               <?php if(isset($item['start_price'])): ?>   <!--#3 property-->
                 <span class="lot__cost">
-                    <?= format_number(intval($item['start_price'])) ?>
+                    <?= format_number_ruble(intval($item['start_price'])) ?>
                   </span>
               <?php endif; ?>
             </div>
