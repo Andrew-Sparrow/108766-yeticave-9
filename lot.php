@@ -19,7 +19,7 @@ where lots.id = ?";
 if (isset($lot_id)) {
   $lot = db_fetch_data($sql, [$lot_id]);
   $content_lot = include_template(
-    "content_lot.php",
+    "lot_content.php",
     [
       "categories" => $categories,
       "lot" => $lot
