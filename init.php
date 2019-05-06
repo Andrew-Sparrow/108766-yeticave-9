@@ -9,3 +9,9 @@ else {
   exit('Скопируйте config.default.php в config.php и установите настройки приложения');
 }
 
+set_timezone("Asia/Yekaterinburg");
+
+$user_name = "Андрей";
+
+$categories = get_categories();
+

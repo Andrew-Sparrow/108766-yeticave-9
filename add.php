@@ -2,10 +2,6 @@
 
 require_once("init.php");
 
-set_timezone("Asia/Yekaterinburg");
-
-$user_name = "Андрей";
-
 $categories = get_categories();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['lot-picture'])) {
