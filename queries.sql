@@ -54,7 +54,8 @@ select title from categories ;
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название,
  стартовую цену, ссылку на изображение, цену, название категории;*/
-SELECT lots.title as lot_title, start_price as start_price , img_src as img_src, MAX(rate) as max_rate, categories.title AS category
+SELECT lots.title as lot_title, start_price as start_price , img_src as img_src,
+       MAX(rate) as max_rate, categories.title AS category
 FROM lots
 JOIN categories ON lots.category_id = categories.id
 left JOIN rates ON lots.category_id = rates.lot_id
