@@ -38,41 +38,39 @@
   <main>
     <nav class="nav">
       <ul class="nav__list container">
-        <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php foreach($categories as $var): ?>
+          <li class="nav__item">
+            <a href="pages/all-lots.html">
+              <?= strip_tags($var['title']); ?>
+            </a>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </nav>
-    <form class="form form--add-lot container form--invalid" action="../add.php" method="post"
-          enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form form--add-lot container <?php isset($errors) ? "form--invalid" : "" ?>
+      action="../add.php" method="post"  enctype="multipart/form-data"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
-        <div class="form__item form__item--invalid"> <!-- form__item--invalid -->
-          <label for="lot-name">Наименование <sup>*</sup></label>
-          <input id="lot-name" type="text" name="lot-title" placeholder="Введите наименование лота">
+        <?php
+          $classname = isset($errors['title']) ? " form__item--invalid" : "";
+          $value = isset($lot['title']) ? $lot['title'] : "";
+        ?>
+        <div class="form__item <?=$classname;?>"> <!-- form__item--invalid -->
+          <label for="lot-title">Наименование <sup>*</sup></label>
+          <input id="lot-title" type="text" name="title"
+                 placeholder="Введите наименование лота" value="<?=$value ?>">
           <span class="form__error">Введите наименование лота</span>
         </div>
-        <div class="form__item">
+        <?php
+          $classname = isset($errors['category_id']) ? " form__item--invalid" : "";
+          $value = isset($category['id']) ? $categories['id'] : "";
+        ?>
+        <div class="form__item $classname">
           <label for="category">Категория <sup>*</sup></label>
-          <select id="category" name="category">
+          <select id="category" name="category_id">
             <option>Выберите категорию</option>
             <?php foreach($categories as $category): ?>
-              <option value="<?= $category['id'] ?>">>
+              <option value="<?= $category['id'] ?>">
                 <?= strip_tags($category['title']); ?>
               </option>
             <?php endforeach; ?>
@@ -97,7 +95,7 @@
       <div class="form__container-three">
         <div class="form__item form__item--small">
           <label for="lot-rate">Начальная цена <sup>*</sup></label>
-          <input id="id-start-price" type="text" name="start-price" placeholder="0">
+          <input id="id-start-price" type="text" name="start_price" placeholder="0">
           <span class="form__error">Введите начальную цену</span>
         </div>
         <div class="form__item form__item--small">
@@ -121,24 +119,13 @@
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
-      <li class="nav__item">
-        <a href="all-lots.html">Доски и лыжи</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Крепления</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Ботинки</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Одежда</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Инструменты</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Разное</a>
-      </li>
+      <?php foreach($categories as $var): ?>
+        <li class="nav__item">
+          <a href="pages/all-lots.html">
+            <?= strip_tags($var['title']); ?>
+          </a>
+        </li>
+      <?php endforeach; ?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">

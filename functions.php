@@ -144,8 +144,7 @@ function db_fetch_data($sql, $data = []) {
 function db_insert_data($sql, $data = []) {
   $link = DbConnectionProvider::getConnection();
   $stmt = db_get_prepare_stmt($link, $sql, $data);
-  mysqli_stmt_execute($stmt);
-  $result = mysqli_stmt_get_result($stmt);
+  $result = mysqli_stmt_execute($stmt);
   
   if ($result) {
     $result = mysqli_insert_id($link);
