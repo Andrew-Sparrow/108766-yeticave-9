@@ -2,10 +2,10 @@
 require_once("init.php");
 
 $lot = [];
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' /*&& isset($_FILES['lot-picture'])*/) {
-  
   
   $lot = [
     'title'       => $_POST['title'] ?? null,
@@ -16,17 +16,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' /*&& isset($_FILES['lot-picture'])*/) {
     'end_date'    => $_POST['end_date'] ?? null
   ];
   
-  $required = ['title', 'category_id', 'description', 'start_price', 'lot_step', 'end_date'];
+  $required = [
+    'title',
+    'category_id',
+    'description',
+    'start_price',
+    'lot_step',
+    'end_date'
+  ];
   
-  $dict = ['title' => 'Название', 'description' => 'Описание'];
+  $dict = [
+    'title' => 'Название',
+    'description' => 'Описание'
+  ];
+  
+  var_dump($_POST);
   
   foreach ($required as $req) {
     if (empty($_POST[$req])) {
       $errors[$req] = 'Это поле надо заполнить';
     }
   }
+  var_dump($errors);
   
   if (count($errors)) {
+    
     $page_content = include_template(
       'add_content.php',
       [
@@ -50,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' /*&& isset($_FILES['lot-picture'])*/) {
     $lot['description'], $lot['start_price'], $lot['end_date'], $lot['lot_step']*/]);
   
   
-  
     if ($new_lot_id) {
     
       header("Location: lot.php?id=" . $new_lot_id);
@@ -69,16 +82,12 @@ else {
     "add_content.php",
     [
       "categories" => $categories,
-      "user_name"  => $user_name
+      "user_name"  => $user_name,
+      "lot" => $lot
     ]
   );
   
   print($add_content);
 }
-
-
-
-
-
 
 
