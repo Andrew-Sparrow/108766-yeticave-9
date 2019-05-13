@@ -93,7 +93,7 @@
     $classname = isset($errors['lot-picture']) ? "form__item--invalid" : "";
     ?>
     <div class="form__item form__item--file">
-      <label>Изображение (не более 2Мб) <sup>*</sup></label>
+      <label>Изображение jpeg, jpg, png (не более 2Мб) <sup>*</sup></label>
       <div class="form__input-file <?= $classname ?>">
         <input class="visually-hidden" type="file" id="id-lot-img" value="" name="lot-picture">
         <label for="id-lot-img">
@@ -127,7 +127,7 @@
       $value = isset($lot['end_date']) ? $lot['end_date'] : "";
       ?>
       <div class="form__item <?= $classname ?>">
-        <label for="id-lot-date">Дата окончания торгов <sup>*</sup></label>
+        <label for="id-lot-date">Дата окончания торгов (дата в формате ГГГГ-ММ-ДД) <sup>*</sup></label>
         <input class="form__input-date" id="id-lot-date" type="text" name="end_date" value="<?= $value ?>"
                placeholder="Введите дату в формате ГГГГ-ММ-ДД">
         <span
@@ -138,9 +138,7 @@
     <button type="submit" class="button">Добавить лот</button>
     </form>
   </main>
-
 </div>
-
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
@@ -210,9 +208,7 @@
     </div>
   </div>
 </footer>
-
 <script src="../flatpickr.js"></script>
 <script src="../script.js"></script>
 </body>
 </html>
-

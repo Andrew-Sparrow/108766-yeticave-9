@@ -50,6 +50,25 @@ function validate_less_hour($end_bargaining): bool {
   return false;
 }
 
+/**
+ * This function validates if time from current day until
+ * date of end of bargaining(formatted string 'Y-m-d')
+ * is more than one day.
+ *
+ * @param string $end_bargaining
+ * @return boolean
+ *
+ */
+function more_than_day($end_bargaining) {
+  
+  $end_bargaining = strtotime($end_bargaining);
+  
+  if ($end_bargaining == strtotime('tomorrow')) {
+    return true;
+  }
+  return false;
+}
+
 
 /**
  * This function returns remained time in "Hours:minutes"
