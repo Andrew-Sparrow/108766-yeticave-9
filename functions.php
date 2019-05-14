@@ -50,6 +50,25 @@ function validate_less_hour($end_bargaining): bool {
   return false;
 }
 
+/**
+ * This function validates if time from current day until
+ * date of end of bargaining(formatted string 'Y-m-d')
+ * is more than one day.
+ *
+ * @param string $end_bargaining
+ * @return boolean
+ *
+ */
+function more_than_day($end_bargaining) {
+  
+  $end_bargaining = strtotime($end_bargaining);
+  
+  if ($end_bargaining >= strtotime('tomorrow')) {
+    return true;
+  }
+  return false;
+}
+
 
 /**
  * This function returns remained time in "Hours:minutes"
@@ -144,8 +163,7 @@ function db_fetch_data($sql, $data = []) {
 function db_insert_data($sql, $data = []) {
   $link = DbConnectionProvider::getConnection();
   $stmt = db_get_prepare_stmt($link, $sql, $data);
-  mysqli_stmt_execute($stmt);
-  $result = mysqli_stmt_get_result($stmt);
+  $result = mysqli_stmt_execute($stmt);
   
   if ($result) {
     $result = mysqli_insert_id($link);

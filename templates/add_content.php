@@ -24,7 +24,7 @@
         <input type="search" name="search" placeholder="Поиск лота">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
-      <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
+      <a class="main-header__add-lot button" href="../add.php">Добавить лот</a>
       <nav class="user-menu">
         <div class="user-menu__logged">
           <p><?= strip_tags($user_name) ?></p>
@@ -38,107 +38,117 @@
   <main>
     <nav class="nav">
       <ul class="nav__list container">
-        <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php foreach ($categories as $var): ?>
+          <li class="nav__item">
+            <a href="pages/all-lots.html">
+              <?= strip_tags($var['title']); ?>
+            </a>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </nav>
-    <form class="form form--add-lot container form--invalid" action="../add.php" method="post"
-          enctype="multipart/form-data"> <!-- form--invalid -->
-      <h2>Добавление лота</h2>
-      <div class="form__container-two">
-        <div class="form__item form__item--invalid"> <!-- form__item--invalid -->
-          <label for="lot-name">Наименование <sup>*</sup></label>
-          <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота">
-          <span class="form__error">Введите наименование лота</span>
-        </div>
-        <div class="form__item">
-          <label for="category">Категория <sup>*</sup></label>
-          <select id="category" name="category">
-            <option>Выберите категорию</option>
-            <?php foreach($categories as $category): ?>
-              <option value="<?= $category['id'] ?>">>
-                <?= strip_tags($category['title']); ?>
-              </option>
-            <?php endforeach; ?>
-          </select>
-          <span class="form__error">Выберите категорию</span>
-        </div>
+    <form class="form form--add-lot container <?= isset($errors) ? "form--invalid" : "" ?> action="
+    /../add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <h2>Добавление лота</h2>
+    <div class="form__container-two">
+      <?php
+      $classname = isset($errors['title']) ? " form__item--invalid" : "";
+      $value = isset($lot['title']) ? $lot['title'] : "";
+      ?>
+      <div class="form__item <?= $classname; ?>"> <!-- form__item--invalid -->
+        <label for="lot-title">Наименование <sup>*</sup></label>
+        <input id="lot-title" type="text" name="title"
+               placeholder="Введите наименование лота" value="<?= $value ?>">
+        <span class="form__error"><?= isset($errors['title']) ? $errors['title'] : 'Введите наименование лота' ?></span>
       </div>
-      <div class="form__item form__item--wide">
-        <label for="id-description">Описание <sup>*</sup></label>
-        <textarea id="id-description" name="description" placeholder="Напишите описание лота"></textarea>
-        <span class="form__error">Напишите описание лота</span>
+      <?php
+      $classname = isset($errors['category_id']) ? "form__item--invalid" : "";
+      ?>
+      <div class="form__item <?= $classname ?> ">
+        <label for="category">Категория <sup>*</sup></label>
+        <select id="category" name="category_id">
+          <option value=''>Выберите категорию</option>
+          <?php foreach ($categories as $category): ?>
+            <option
+              value="<?= ($category['id']) ?>" <?= isset($lot['category_id']) && (int)$lot['category_id'] === (int)$category['id'] ? 'selected' : '' ?> >
+              <?= strip_tags($category['title']); ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+        <span
+          class="form__error"><?= isset($errors['category_id']) ? $errors['category_id'] : 'Выберите категорию' ?></span>
       </div>
-      <div class="form__item form__item--file">
-        <label>Изображение (не более 2Мб) <sup>*</sup></label>
-        <div class="form__input-file">
-          <input class="visually-hidden" type="file" id="id-lot-img" value="" name="lot-picture">
-          <label for="id-lot-img">
-            Добавить
-          </label>
-        </div>
+    </div>
+    <?php
+    $classname = isset($errors['description']) ? " form__item--invalid" : "";
+    $value = isset($lot['description']) ? $lot['description'] : "";
+    ?>
+    <div class="form__item form__item--wide <?= $classname ?>">
+      <label for="id-description">Описание <sup>*</sup></label>
+      <textarea id="id-description" name="description" placeholder="Напишите описание лота"><?= $value ?></textarea>
+      <span
+        class="form__error"><?= isset($errors['description']) ? $errors['description'] : 'Выберите описание' ?></span>
+    </div>
+    <?php
+    $classname = isset($errors['lot-picture']) ? "form__item--invalid" : "";
+    ?>
+    <div class="form__item form__item--file">
+      <label>Изображение jpeg, jpg, png (не более 2Мб) <sup>*</sup></label>
+      <div class="form__input-file <?= $classname ?>">
+        <input class="visually-hidden" type="file" id="id-lot-img" value="" name="lot-picture">
+        <label for="id-lot-img">
+          Добавить
+        </label>
+        <span class="form__error"><?= isset($errors['lot-picture']) ? $errors['lot-picture'] : '' ?></span>
       </div>
-      <div class="form__container-three">
-        <div class="form__item form__item--small">
-          <label for="lot-rate">Начальная цена <sup>*</sup></label>
-          <input id="id-start-price" type="text" name="start-price" placeholder="0">
-          <span class="form__error">Введите начальную цену</span>
-        </div>
-        <div class="form__item form__item--small">
-          <label for="id-lot-step">Шаг ставки <sup>*</sup></label>
-          <input id="id-lot-step" type="text" name="lot-step" placeholder="0">
-          <span class="form__error">Введите шаг ставки</span>
-        </div>
-        <div class="form__item">
-          <label for="id-lot-date">Дата окончания торгов <sup>*</sup></label>
-          <input class="form__input-date" id="id-lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
-          <span class="form__error">Введите дату завершения торгов</span>
-        </div>
+    </div>
+    <div class="form__container-three">
+      <?php
+      $classname = isset($errors['start_price']) ? " form__item--invalid" : "";
+      $value = isset($lot['start_price']) ? $lot['start_price'] : "";
+      ?>
+      <div class="form__item form__item--small <?= $classname ?>">
+        <label for="lot-rate">Начальная цена <sup>*</sup></label>
+        <input id="id-start-price" type="text" name="start_price" value="<?= $value ?>" placeholder="0">
+        <span
+          class="form__error"><?= isset($errors['start_price']) ? $errors['start_price'] : 'Введите начальную цену' ?></span>
       </div>
-      <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
-      <button type="submit" class="button">Добавить лот</button>
+      <?php
+      $classname = isset($errors['lot_step']) ? " form__item--invalid" : "";
+      $value = isset($lot['lot_step']) ? $lot['lot_step'] : "";
+      ?>
+      <div class="form__item form__item--small <?= $classname ?>">
+        <label for="id-lot-step">Шаг ставки <sup>*</sup></label>
+        <input id="id-lot-step" type="text" name="lot_step" value="<?= $value ?>" placeholder="0">
+        <span class="form__error"><?= isset($errors['lot_step']) ? $errors['lot_step'] : 'Введите шаг ставки' ?></span>
+      </div>
+      <?php
+      $classname = isset($errors['end_date']) ? " form__item--invalid" : "";
+      $value = isset($lot['end_date']) ? $lot['end_date'] : "";
+      ?>
+      <div class="form__item <?= $classname ?>">
+        <label for="id-lot-date">Дата окончания торгов (дата в формате ГГГГ-ММ-ДД) <sup>*</sup></label>
+        <input class="form__input-date" id="id-lot-date" type="text" name="end_date" value="<?= $value ?>"
+               placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+        <span
+          class="form__error"><?= isset($errors['end_date']) ? $errors['end_date'] : 'Введите дату окончания торгов' ?></span>
+      </div>
+    </div>
+    <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+    <button type="submit" class="button">Добавить лот</button>
     </form>
   </main>
-
 </div>
-
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
-      <li class="nav__item">
-        <a href="all-lots.html">Доски и лыжи</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Крепления</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Ботинки</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Одежда</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Инструменты</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Разное</a>
-      </li>
+      <?php foreach ($categories as $var): ?>
+        <li class="nav__item">
+          <a href="pages/all-lots.html">
+            <?= strip_tags($var['title']); ?>
+          </a>
+        </li>
+      <?php endforeach; ?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">
@@ -150,25 +160,41 @@
       <span class="visually-hidden">Мы в соцсетях:</span>
       <a class="social__link social__link--facebook" href="#">
         <span class="visually-hidden">Facebook</span>
-        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg"><circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.667"/><path fill="#879296" d="M14.26 20.983h-2.816v-6.626H10.04v-2.28h1.404v-1.364c0-1.862.79-2.922 3.04-2.922h1.87v2.28h-1.17c-.876 0-.972.322-.972.916v1.14h2.212l-.245 2.28h-1.92v6.625z"/></svg>
+        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
+          <circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.667"/>
+          <path fill="#879296"
+                d="M14.26 20.983h-2.816v-6.626H10.04v-2.28h1.404v-1.364c0-1.862.79-2.922 3.04-2.922h1.87v2.28h-1.17c-.876 0-.972.322-.972.916v1.14h2.212l-.245 2.28h-1.92v6.625z"/>
+        </svg>
       </a>
       <span class="visually-hidden">,</span>
       <a class="social__link social__link--twitter" href="#">
         <span class="visually-hidden">Twitter</span>
-        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg"><circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.687"/><path fill="#879296" d="M18.38 10.572c.525-.336.913-.848 1.092-1.445-.485.305-1.02.52-1.58.635-.458-.525-1.12-.827-1.816-.83-1.388.063-2.473 1.226-2.44 2.615-.002.2.02.4.06.596-2.017-.144-3.87-1.16-5.076-2.78-.22.403-.335.856-.332 1.315-.01.865.403 1.68 1.104 2.188-.397-.016-.782-.13-1.123-.333-.03 1.207.78 2.272 1.95 2.567-.21.06-.43.09-.653.088-.155.015-.313.015-.47 0 .3 1.045 1.238 1.777 2.324 1.815-.864.724-1.956 1.12-3.083 1.122-.198.013-.397.013-.595 0 1.12.767 2.447 1.18 3.805 1.182 4.57 0 7.066-3.992 7.066-7.456v-.34c.49-.375.912-.835 1.24-1.357-.465.218-.963.36-1.473.42z"/></svg>
+        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
+          <circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.687"/>
+          <path fill="#879296"
+                d="M18.38 10.572c.525-.336.913-.848 1.092-1.445-.485.305-1.02.52-1.58.635-.458-.525-1.12-.827-1.816-.83-1.388.063-2.473 1.226-2.44 2.615-.002.2.02.4.06.596-2.017-.144-3.87-1.16-5.076-2.78-.22.403-.335.856-.332 1.315-.01.865.403 1.68 1.104 2.188-.397-.016-.782-.13-1.123-.333-.03 1.207.78 2.272 1.95 2.567-.21.06-.43.09-.653.088-.155.015-.313.015-.47 0 .3 1.045 1.238 1.777 2.324 1.815-.864.724-1.956 1.12-3.083 1.122-.198.013-.397.013-.595 0 1.12.767 2.447 1.18 3.805 1.182 4.57 0 7.066-3.992 7.066-7.456v-.34c.49-.375.912-.835 1.24-1.357-.465.218-.963.36-1.473.42z"/>
+        </svg>
       </a>
       <span class="visually-hidden">,</span>
       <a class="social__link social__link--instagram" href="#">
         <span class="visually-hidden">Instagram</span>
-        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg"><circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.687"/><path fill="#879296" d="M13.5 8.3h2.567c.403.002.803.075 1.18.213.552.213.988.65 1.2 1.2.14.38.213.778.216 1.18v5.136c-.003.403-.076.803-.215 1.18-.213.552-.65.988-1.2 1.2-.378.14-.778.213-1.18.216h-5.135c-.403-.003-.802-.076-1.18-.215-.552-.214-.988-.65-1.2-1.2-.14-.38-.212-.78-.215-1.182V13.46v-2.566c.003-.403.076-.802.214-1.18.213-.552.65-.988 1.2-1.2.38-.14.778-.212 1.18-.215H13.5m0-1.143h-2.616c-.526.01-1.048.108-1.54.292-.853.33-1.527 1-1.856 1.854-.184.493-.283 1.014-.292 1.542v5.232c.01.526.108 1.048.292 1.54.33.853 1.003 1.527 1.855 1.856.493.184 1.015.283 1.54.293H16.117c.527-.01 1.048-.11 1.54-.293.854-.33 1.527-1.003 1.856-1.855.184-.493.283-1.015.293-1.54V13.46v-2.614c-.01-.528-.11-1.05-.293-1.542-.33-.853-1.002-1.525-1.855-1.855-.493-.185-1.014-.283-1.54-.293-.665.01-.89 0-2.617 0zm0 3.093c-2.51.007-4.07 2.73-2.808 4.898 1.26 2.17 4.398 2.16 5.645-.017.285-.495.434-1.058.433-1.63-.006-1.8-1.47-3.256-3.27-3.25zm0 5.378c-1.63-.007-2.64-1.777-1.82-3.185.823-1.41 2.86-1.4 3.67.017.18.316.276.675.278 1.04.006 1.177-.95 2.133-2.128 2.128zm4.118-5.524c0 .58-.626.94-1.127.65-.5-.29-.5-1.012 0-1.3.116-.067.245-.102.378-.102.418-.005.76.333.76.752z"/></svg>
+        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
+          <circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.687"/>
+          <path fill="#879296"
+                d="M13.5 8.3h2.567c.403.002.803.075 1.18.213.552.213.988.65 1.2 1.2.14.38.213.778.216 1.18v5.136c-.003.403-.076.803-.215 1.18-.213.552-.65.988-1.2 1.2-.378.14-.778.213-1.18.216h-5.135c-.403-.003-.802-.076-1.18-.215-.552-.214-.988-.65-1.2-1.2-.14-.38-.212-.78-.215-1.182V13.46v-2.566c.003-.403.076-.802.214-1.18.213-.552.65-.988 1.2-1.2.38-.14.778-.212 1.18-.215H13.5m0-1.143h-2.616c-.526.01-1.048.108-1.54.292-.853.33-1.527 1-1.856 1.854-.184.493-.283 1.014-.292 1.542v5.232c.01.526.108 1.048.292 1.54.33.853 1.003 1.527 1.855 1.856.493.184 1.015.283 1.54.293H16.117c.527-.01 1.048-.11 1.54-.293.854-.33 1.527-1.003 1.856-1.855.184-.493.283-1.015.293-1.54V13.46v-2.614c-.01-.528-.11-1.05-.293-1.542-.33-.853-1.002-1.525-1.855-1.855-.493-.185-1.014-.283-1.54-.293-.665.01-.89 0-2.617 0zm0 3.093c-2.51.007-4.07 2.73-2.808 4.898 1.26 2.17 4.398 2.16 5.645-.017.285-.495.434-1.058.433-1.63-.006-1.8-1.47-3.256-3.27-3.25zm0 5.378c-1.63-.007-2.64-1.777-1.82-3.185.823-1.41 2.86-1.4 3.67.017.18.316.276.675.278 1.04.006 1.177-.95 2.133-2.128 2.128zm4.118-5.524c0 .58-.626.94-1.127.65-.5-.29-.5-1.012 0-1.3.116-.067.245-.102.378-.102.418-.005.76.333.76.752z"/>
+        </svg>
       </a>
       <span class="visually-hidden">,</span>
       <a class="social__link social__link--vkontakte" href="#">
         <span class="visually-hidden">Вконтакте</span>
-        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg"><circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.666"/><path fill="#879296" d="M13.92 18.07c.142-.016.278-.074.39-.166.077-.107.118-.237.116-.37 0 0 0-1.13.516-1.296.517-.165 1.208 1.09 1.95 1.58.276.213.624.314.973.28h1.95s.973-.057.525-.837c-.38-.62-.865-1.17-1.432-1.626-1.208-1.1-1.043-.916.41-2.816.886-1.16 1.236-1.86 1.13-2.163-.108-.302-.76-.214-.76-.214h-2.164c-.092-.026-.19-.026-.282 0-.083.058-.15.135-.195.225-.224.57-.49 1.125-.8 1.656-.973 1.61-1.344 1.697-1.51 1.59-.37-.234-.272-.975-.272-1.433 0-1.56.243-2.202-.468-2.377-.32-.075-.647-.108-.974-.098-.604-.052-1.213.01-1.793.186-.243.116-.438.38-.32.4.245.018.474.13.642.31.152.303.225.638.214.975 0 0 .127 1.832-.302 2.056-.43.223-.692-.167-1.55-1.618-.29-.506-.547-1.03-.77-1.57-.038-.09-.098-.17-.174-.233-.1-.065-.214-.108-.332-.128H6.485s-.312 0-.42.137c-.106.135 0 .36 0 .36.87 2 2.022 3.868 3.42 5.543.923.996 2.21 1.573 3.567 1.598z"/></svg>
+        <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
+          <circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.666"/>
+          <path fill="#879296"
+                d="M13.92 18.07c.142-.016.278-.074.39-.166.077-.107.118-.237.116-.37 0 0 0-1.13.516-1.296.517-.165 1.208 1.09 1.95 1.58.276.213.624.314.973.28h1.95s.973-.057.525-.837c-.38-.62-.865-1.17-1.432-1.626-1.208-1.1-1.043-.916.41-2.816.886-1.16 1.236-1.86 1.13-2.163-.108-.302-.76-.214-.76-.214h-2.164c-.092-.026-.19-.026-.282 0-.083.058-.15.135-.195.225-.224.57-.49 1.125-.8 1.656-.973 1.61-1.344 1.697-1.51 1.59-.37-.234-.272-.975-.272-1.433 0-1.56.243-2.202-.468-2.377-.32-.075-.647-.108-.974-.098-.604-.052-1.213.01-1.793.186-.243.116-.438.38-.32.4.245.018.474.13.642.31.152.303.225.638.214.975 0 0 .127 1.832-.302 2.056-.43.223-.692-.167-1.55-1.618-.29-.506-.547-1.03-.77-1.57-.038-.09-.098-.17-.174-.233-.1-.065-.214-.108-.332-.128H6.485s-.312 0-.42.137c-.106.135 0 .36 0 .36.87 2 2.022 3.868 3.42 5.543.923.996 2.21 1.573 3.567 1.598z"/>
+        </svg>
       </a>
     </div>
-    <a class="main-footer__add-lot button" href="add-lot.html">Добавить лот</a>
+    <a class="main-footer__add-lot button" href="../add.php">Добавить лот</a>
     <div class="main-footer__developed-by">
       <span class="visually-hidden">Разработано:</span>
       <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">
@@ -182,9 +208,7 @@
     </div>
   </div>
 </footer>
-
 <script src="../flatpickr.js"></script>
 <script src="../script.js"></script>
 </body>
 </html>
-
