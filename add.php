@@ -30,7 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' /*&& isset($_FILES['lot-picture'])*/) {
     if (empty($lot[$req])) {
       $errors[$req] = 'Это поле надо заполнить';
     }
-    elseif($lot[$req] === 'lot-picture') {
+  }
+  
+  foreach ($required as $req) {
+    if($req !== 'lot-picture') {
       trim($lot[$req]);
     }
   }
@@ -39,31 +42,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' /*&& isset($_FILES['lot-picture'])*/) {
   if (!is_numeric($lot['start_price'])) {
     $errors['start_price'] = 'Введите число';
   }
-  else {
-    if ($lot['start_price'] <= 0 ) {
+  elseif ($lot['start_price'] <= 0 ) {
       $errors['start_price'] = 'Введите число больше нуля';
-    }
   }
   
   //verifying lot step
-  if (!is_numeric($lot['start_price'])) {
-    $errors['start_price'] = 'Введите число';
+  if (!is_numeric($lot['lot_step'])) {
+    $errors['lot_step'] = 'Введите число';
   }
   elseif ($lot['lot_step'] <= 0 ) {
       $errors['lot_step'] = 'Введите число больше нуля';
   }
   elseif (!ctype_digit($lot['lot_step'])) {
-    $errors['lot_step'] = 'Введите целое число';
+      $errors['lot_step'] = 'Введите целое число';
   }
   
+  //verifying date of ending
   if (!is_date_valid($lot['end_date'])) {
     $errors['end_date'] = 'Введите дату в указанном формате';
   }
   elseif (!more_than_day($lot['end_date'])) {
     $errors['end_date'] = 'дата должна быть больше текущей даты, хотя бы на один день';
   }
-  
+  /*
   if (empty($_FILES['lot-picture']['name'])) {
+    $errors['lot-picture'] = 'Добавьте файл';
+  }
+  */
+  if(empty($errors['lot-picture']) &&
+     isset($_FILES['lot-picture']['error'])&&
+     $_FILES['lot-picture']['error'] === UPLOAD_ERR_NO_FILE){
+  
     $errors['lot-picture'] = 'Добавьте файл';
   }
   

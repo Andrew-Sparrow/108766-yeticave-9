@@ -63,7 +63,7 @@ function more_than_day($end_bargaining) {
   
   $end_bargaining = strtotime($end_bargaining);
   
-  if ($end_bargaining == strtotime('tomorrow')) {
+  if ($end_bargaining >= strtotime('tomorrow')) {
     return true;
   }
   return false;
