@@ -22,13 +22,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   ];
   
   foreach ($required as $req) {
-    if (empty($registrationq[$req])) {
-      $errors[$req] = 'Это поле надо заполнить';
+    if (empty($registration[$req])) {
+      switch ($req) {
+        case  'email' :
+          $errors[$req] = 'Введите емаил';
+          continue;
+        case  'password' :
+          $errors[$req] = 'Введите пароль';
+          continue;
+        case  'name' :
+          $errors[$req] = 'Введите имя';
+          continue;
+        case  'message' :
+          $errors[$req] = 'Введите контактные данные';
+          continue;
+      }
     }
   }
+  
+  $email_validation = false;
+  
+  if(empty($errors['email'])) {
+    $email_validation = filter_var($registration['email'], FILTER_VALIDATE_EMAIL);
+    $errors['email'] = 'Введите корректный емаил';
+  }
+  
 }
 
 var_dump($errors);
+var_dump($_POST);
+var_dump($email_validation);
 
 /*
 
