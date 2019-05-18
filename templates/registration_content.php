@@ -1,6 +1,3 @@
-<?php
-?>
-
 <form class="form container <?= isset($errors) ? "form--invalid" : "" ?>"
       action="registration.php" method="post" autocomplete="off"> <!-- form--invalid -->
   <h2>Регистрация нового аккаунта</h2>

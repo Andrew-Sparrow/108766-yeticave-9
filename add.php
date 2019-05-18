@@ -1,4 +1,5 @@
 <?php
+//adding new lot
 require_once("init.php");
 $lot = [];
 $errors = [];

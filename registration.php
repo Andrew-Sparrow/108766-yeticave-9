@@ -3,6 +3,8 @@
 require_once("init.php");
 $registration = [];
 $errors = [];
+$fetch_data = false;
+$page_title = 'Регистрация';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,34 +44,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   
   $email_validation = false;
   
-  if(empty($errors['email'])) {
+  if (empty($errors['email'])) {
     $email_validation = filter_var($registration['email'], FILTER_VALIDATE_EMAIL);
-    $errors['email'] = 'Введите корректный емаил';
+    
+    if ($email_validation === false) {
+      $errors['email'] = 'Введите корректный емаил';
+    }
   }
   
+  if (empty($errors)) {
+    
+    $sql = "SELECT id FROM users WHERE email = ?";
+    $user_email = $registration['email'];
+    
+    $fetch_data = db_fetch_data($sql, [$user_email]);
+    
+    //verifying if there is user with the same id
+    if ($fetch_data) {
+      $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
+    }
+    else {
+      $password = password_hash($registration['password'], PASSWORD_DEFAULT);
+      
+      $sql = "INSERT INTO users (email, name, password, contact)
+        VALUES ( ?, ?, ?, ?)";
+      
+      $new_user = db_insert_data(
+        $sql,
+        [
+          $registration['email'],
+          $registration['name'],
+          $registration['password'],
+          $registration['message']
+        ]
+      );
+      
+      if ($new_user && empty($errors)) {
+        header("Location: enter.php");
+        exit();
+      }
+    }
+  }
 }
 
-var_dump($errors);
-var_dump($_POST);
-var_dump($email_validation);
-
-/*
-
-session_start();
-$visit_count = 1;
-
-if (isset($_SESSION["visit_count"])) {
-  $visit_count = $_SESSION["visit_count"] + 1;
-}
-
-$_SESSION["visit_count"] = $visit_count;
-
-print("Количество посещений: " . $visit_count);
-
-*/
-
-
-$registration_content = include_template(
+$content = include_template(
   'registration_content.php',
   [
     'registration' => $registration,
@@ -80,9 +98,10 @@ $registration_content = include_template(
 $layout = include_template(
   'simple_layout.php',
   [
-    'registration_content' => $registration_content,
-    'categories'           => $categories,
-    'user_name'            => $user_name
+    'page_title' => $page_title,
+    'content'    => $content,
+    'categories' => $categories,
+    'user_name'  => $user_name
   ]
 );
 

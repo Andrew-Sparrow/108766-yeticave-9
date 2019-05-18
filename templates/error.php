@@ -4,7 +4,7 @@
       <h2 class="content__header-text">Ошибка</h2>
     </header>
     <article class="gif-list">
-      <p class="error"><?= $error; ?></p>
+      <p class="error"><?= $errors; ?></p>
     </article>
   </div>
 </main>
