@@ -26,15 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   
   foreach ($required as $req) {
     if (empty($lot[$req])) {
-      //var_dump($lot[$req]);
       $errors[$req] = 'Это поле надо заполнить';
     }
   }
-/*
+
   foreach ($required as $req) {
     trim($lot[$req]);
   }
- */
+
   //verifying start price
   if (!is_numeric($lot['start_price'])) {
     $errors['start_price'] = 'Введите число';
@@ -108,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $errors['lot-picture'] = 'Загрузите картинку в формате jpg, jpeg, png';
     }
   }
-    // if no errors
+  // if no errors
   if(empty($errors)) {
     $file_extension = pathinfo($_FILES['lot-picture']['name'], PATHINFO_EXTENSION);
   
