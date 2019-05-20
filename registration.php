@@ -7,7 +7,7 @@ $fetch_data = false;
 $page_title = 'Регистрация';
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   $registration = [
     'email'    => $_POST['email'] ?? null,
@@ -25,31 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   
   foreach ($required as $req) {
     if (empty($registration[$req])) {
-      switch ($req) {
-        case  'email' :
-          $errors[$req] = 'Введите емаил';
-          continue;
-        case  'password' :
-          $errors[$req] = 'Введите пароль';
-          continue;
-        case  'name' :
-          $errors[$req] = 'Введите имя';
-          continue;
-        case  'message' :
-          $errors[$req] = 'Введите контактные данные';
-          continue;
-      }
+      $errors[$req] = 'Заполните поле';
     }
   }
   
-  $email_validation = false;
-  
-  if (empty($errors['email'])) {
-    $email_validation = filter_var($registration['email'], FILTER_VALIDATE_EMAIL);
-    
-    if ($email_validation === false) {
-      $errors['email'] = 'Введите корректный емаил';
-    }
+  if (empty($errors['email']) && (filter_var($registration['email'], FILTER_VALIDATE_EMAIL) === false)) {
+    $errors['email'] = 'Введите корректный емаил';
   }
   
   if (empty($errors)) {
@@ -60,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $fetch_data = db_fetch_data($sql, [$user_email]);
     
     //verifying if there is user with the same id
-    if ($fetch_data) {
+    if (count($fetch_data) > 0) {
       $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
     }
     else {
@@ -79,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]
       );
       
-      if ($new_user && empty($errors)) {
+      if ($new_user) {
         header("Location: enter.php");
         exit();
       }

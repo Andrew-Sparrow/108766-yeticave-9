@@ -17,9 +17,9 @@
   <div class="form__item <?= $classname ?>">
     <label for="password">Пароль <sup>*</sup></label>
     <input id="password" type="password" name="password" placeholder="Введите пароль">
-    <? if (isset($errors['email'])): ?>
+    <?php if (isset($errors['password'])): ?>
       <span class="form__error"><?= $errors['password'] ?></span>
-    <? endif; ?>
+    <?php endif; ?>
   </div>
   <?php
   $classname = isset($errors['name']) ? 'form__item--invalid' : '';
@@ -27,9 +27,9 @@
   <div class="form__item <?= $classname ?>">
     <label for="name">Имя <sup>*</sup></label>
     <input id="name" type="text" name="name" placeholder="Введите имя">
-    <? if (isset($errors['email'])): ?>
+    <?php if (isset($errors['name'])): ?>
       <span class="form__error"><?= $errors['name'] ?></span>
-    <? endif; ?>
+    <?php endif; ?>
   </div>
   <?php
   $classname = isset($errors['message']) ? 'form__item--invalid' : '';
@@ -37,11 +37,13 @@
   <div class="form__item <?= $classname ?>">
     <label for="message">Контактные данные <sup>*</sup></label>
     <textarea id="message" name="message" placeholder="Напишите как с вами связаться"></textarea>
-    <span class="form__error"><?= $errors['message'] ?></span>
+    <?php if (isset($errors['message'])): ?>
+      <span class="form__error"><?= $errors['message'] ?></span>
+    <?php endif; ?>
   </div>
-  <? if (count($errors) != 0): ?>
+  <?php if (count($errors) !== 0): ?>
     <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
-  <? endif; ?>
+  <?php endif; ?>
   <button type="submit" class="button">Зарегистрироваться</button>
   <a class="text-link" href="#">Уже есть аккаунт</a>
 </form>
