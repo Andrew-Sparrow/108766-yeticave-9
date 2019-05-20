@@ -1,7 +1,30 @@
 <?php
+//showing existing lot
 require_once("init.php");
+$page_title = 'Ошибка';
+$user_name = "Андрей";
 
-$templete_404 = include_template("404_content.php", ["categories" => $categories]);
+$content = include_template('404_content.php',[]);
+
+$layout = include_template(
+  'simple_layout.php',
+  [
+    'page_title' => $page_title,
+    'content'    => $content,
+    'categories' => $categories,
+    'user_name'  => $user_name
+  ]
+);
+
+$templete_404 = include_template(
+  'simple_layout.php',
+  [
+    'page_title' => $page_title,
+    'content'    => $content,
+    'categories' => $categories,
+    'user_name'  => $user_name
+  ]
+);
 
 if (!isset($_GET['id'])) {
   http_response_code(404);
@@ -30,22 +53,26 @@ if (is_null($lot)) {
   exit();
 }
 
-$content_lot = include_template(
+$page_title = strip_tags($lot['title']);
+
+$content = include_template(
   "lot_content.php",
   [
-    "categories" => $categories,
-    "lot"        => $lot,
+    "lot"           => $lot,
     "current_price" => $current_price,
-    "min_rate" => $min_rate
+    "min_rate"      => $min_rate
   ]
 );
 
-print($content_lot);
+$layout = include_template(
+  'simple_layout.php',
+  [
+    'page_title' => $page_title,
+    'content'    => $content,
+    'categories' => $categories,
+    'user_name'  => $user_name
+  ]
+);
 
-
-
-
-
-
-
+print ($layout);
 
