@@ -3,7 +3,7 @@ require_once("init.php");
 
 set_timezone("Asia/Yekaterinburg");
 
-$user_name = "Андрей"; // укажите здесь ваше имя
+//$user_name = "Андрей"; // укажите здесь ваше имя
 $title = "Главная";
 
 $categories = get_categories();
