@@ -131,7 +131,7 @@ function format_number($number): string {
  *        to a prepared statement
  * @return an array
  */
-function db_fetch_data($sql, $data = []) {
+function db_fetch_data($sql, $data = []):array {
   $link = DbConnectionProvider::getConnection();
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
