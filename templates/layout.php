@@ -1,5 +1,5 @@
 <?php
-$is_auth = 1;
+$is_auth = 0;
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +40,7 @@ $is_auth = 1;
               <a href="#">Регистрация</a>
             </li>
             <li class="user-menu__item">
-              <a href="#">Вход</a>
+              <a href="enter.php">Вход</a>
             </li>
           </ul>
         <?php endif; ?>

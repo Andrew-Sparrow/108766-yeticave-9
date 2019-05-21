@@ -5,6 +5,7 @@
   <h2>Вход</h2>
   <?php
   $classname = isset($errors['email']) ? 'form__item--invalid' : '';
+  $value = $user[0]['email'] ??  "";
   ?>
   <div class="form__item <?= $classname ?>"> <!-- form__item--invalid -->
     <label for="email">E-mail <sup>*</sup></label>

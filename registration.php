@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         [
           $registration['email'],
           $registration['name'],
-          $registration['password'],
+          $password,
           $registration['message']
         ]
       );
