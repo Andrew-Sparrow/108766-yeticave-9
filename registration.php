@@ -5,6 +5,7 @@ $registration = [];
 $errors = [];
 $fetch_data = false;
 $page_title = 'Регистрация';
+$user_name = null;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

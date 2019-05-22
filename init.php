@@ -11,7 +11,7 @@ else {
 
 set_timezone("Asia/Yekaterinburg");
 
-$user_name = "Андрей";
+//$user_name = "Андрей";
 
 $categories = get_categories();
 

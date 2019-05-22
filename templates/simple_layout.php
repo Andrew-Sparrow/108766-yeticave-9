@@ -1,5 +1,6 @@
 <?php
 $is_auth = 0;
+isset($_SESSION['user']['name']) ? $is_auth = 1 : $is_auth = 0;
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +22,7 @@ $is_auth = 0;
   <header class="main-header">
     <div class="main-header__container container">
       <h1 class="visually-hidden">YetiCave</h1>
-      <a class="main-header__logo" href="index.html">
+      <a class="main-header__logo" href="index.php">
         <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
       </a>
       <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
@@ -36,15 +37,15 @@ $is_auth = 0;
           <div class="user-menu__logged">
             <p><?= strip_tags($user_name) ?></p>
             <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
-            <a class="user-menu__logout" href="#">Выход</a>
+            <a class="user-menu__logout" href="logout.php">Выход</a>
           </div>
         <?php else: ?>
           <ul class="user-menu__list">
             <li class="user-menu__item">
-              <a href="#">Регистрация</a>
+              <a href="registration.php">Регистрация</a>
             </li>
             <li class="user-menu__item">
-              <a href="#">Вход</a>
+              <a href="enter.php">Вход</a>
             </li>
           </ul>
         <?php endif; ?>

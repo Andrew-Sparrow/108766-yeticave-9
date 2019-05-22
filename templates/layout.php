@@ -1,5 +1,6 @@
 <?php
 $is_auth = 0;
+isset($_SESSION['user']['name']) ? $is_auth = 1 : $is_auth = 0;
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +24,7 @@ $is_auth = 0;
         <input type="search" name="search" placeholder="Поиск лота">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
-      <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
+      <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
       
       <nav class="user-menu">
         

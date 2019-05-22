@@ -4,7 +4,7 @@ require_once("init.php");
 $enter = [];
 $errors = [];
 $page_title = 'Страница входа';
-
+$_SESSION = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
@@ -21,51 +21,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
   
-  $sql = 'select * from users where email = ?';
-  $user = db_fetch_data($sql, [$enter['email']])[0];
-  
-  //var_dump($user[0]);
+  $sql = 'select id, name, password from users where email = ?';
+  $user = db_fetch_data($sql, [$enter['email']]);
   
   if (!count($errors) && count($user) > 0) {
-    if (password_verify($enter['password'], $user['password'])) {
+    if (password_verify($enter['password'], $user[0]['password'])) {
+      
       session_start();
-      $_SESSION['user'] = $user;
+      
+      $_SESSION['user']['id'] = $user[0]['id'];
+      $_SESSION['user']['name'] = $user[0]['name'];
+      
+      require_once('index.php');
+      exit();
     }
     else {
       $errors['password'] = 'Неверный пароль';
     }
   }
-  elseif(empty($errors['email']) && count($user) === 0) {
+  elseif (empty($errors['email']) && count($user) === 0) {
     $errors['email'] = 'Такой пользователь не найден';
-  }
-  
-  if(!count($errors)) {
-    header('Location: index.php');
-    exit();
   }
 }
 else {
   if (isset($_SESSION['user'])) {
-    require_once("init.php");
-  
-    $layout  = include_template(
-      "layout.php",
-      [
-        "user_name"    => $user_name,
-        "title"        => $title,
-        "main_content" => $main_content,
-        "categories"   => $categories
-      ]
-    );
-  
-    print($layout);
+    require_once("index.php");
+    exit();
   }
 }
 
 $enter_content = include_template(
   'enter_content.php',
   [
-    'errors' => $errors
+    'errors' => $errors,
+    'enter'  => $enter
   ]
 );
 
@@ -74,9 +63,10 @@ $layout = include_template(
   [
     'page_title' => $page_title,
     'content'    => $enter_content,
-    'categories' => $categories,
-    'user_name'  => $user_name
+    'categories' => $categories
   ]
 );
 
 print ($layout);
+
+

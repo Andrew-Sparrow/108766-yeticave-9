@@ -3,8 +3,12 @@ require_once("init.php");
 
 set_timezone("Asia/Yekaterinburg");
 
-//$user_name = "Андрей"; // укажите здесь ваше имя
 $title = "Главная";
+$user_name = null;
+
+if (isset($_SESSION['user'])) {
+  $user_name = $_SESSION['user']['name'];
+}
 
 $categories = get_categories();
 $lots = get_lots();
