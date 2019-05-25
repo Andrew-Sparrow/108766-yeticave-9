@@ -23,7 +23,7 @@
       </p>
     </div>
     <div class="lot-item__right">
-      <?php if(isset($_SESSION['user']['name'])): ?>
+      <?php if(isset($_SESSION['user'])): ?>
       <div class="lot-item__state">
         <div class="lot-item__timer timer
           <?php if (isset($lot['end_date'])): ?>

@@ -4,9 +4,8 @@ require_once("init.php");
 set_timezone("Asia/Yekaterinburg");
 
 $title = "Главная";
-$user_name = null;
 
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['user']['name'])) {
   $user_name = $_SESSION['user']['name'];
 }
 

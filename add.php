@@ -4,6 +4,11 @@ require_once("init.php");
 $lot = [];
 $errors = [];
 
+if (!isset($_SESSION['user'])) {
+  http_response_code(403);
+  exit();
+}
+
 if(isset($_SESSION['user'])) {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
@@ -151,6 +156,4 @@ if(isset($_SESSION['user'])) {
   
   print($add_content);
 }
-else {
-  http_response_code(403);
-}
+
