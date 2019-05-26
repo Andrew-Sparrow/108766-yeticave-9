@@ -23,7 +23,6 @@ $main_content = include_template(
 $layout = include_template(
   "layout.php",
   [
-    //"user_name"    => $user_name,
     "title"        => $title,
     "main_content" => $main_content,
     "categories"   => $categories

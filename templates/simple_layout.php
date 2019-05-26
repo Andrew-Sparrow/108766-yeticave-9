@@ -29,7 +29,7 @@ $user_name = $_SESSION['user']['name'] ?? '';
         <input type="search" name="search" placeholder="Поиск лота">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
-      <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
+      <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
       <nav class="user-menu">
     
         <!-- здесь должен быть PHP код для показа меню и данных пользователя -->

@@ -49,7 +49,6 @@ else {
   }
 }
 
-
 $enter_content = include_template(
   'enter_content.php',
   [
