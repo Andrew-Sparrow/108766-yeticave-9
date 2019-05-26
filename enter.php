@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
       !isset($_SESSION['user']['id'])? $_SESSION['user']['id'] = $user['id']: '' ;
       !isset($_SESSION['user']['name'])? $_SESSION['user']['name'] = $user['name']: '' ;
-      
-      require_once('index.php');
+  
+      header('Location: /');
       exit();
     }
     else {
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 else {
   if (isset($_SESSION['user'])) {
-    require_once("index.php");
+    header('Location: /');
     exit();
   }
 }

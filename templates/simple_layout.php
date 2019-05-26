@@ -1,6 +1,6 @@
 <?php
-$is_auth = 0;
-isset($_SESSION['user']['name']) ? $is_auth = 1 : $is_auth = 0;
+$is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
+$user_name = $_SESSION['user']['name'] ?? '';
 ?>
 
 <!DOCTYPE html>

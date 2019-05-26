@@ -1,7 +1,6 @@
 <?php
 
-$_SESSION = [];
-
-header('Location: index.php');
-exit();
+Session_start();
+Session_destroy();
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 

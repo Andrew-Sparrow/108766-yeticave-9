@@ -1,5 +1,6 @@
 <?php
 $is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
+$user_name = $_SESSION['user']['name'] ?? '';
 ?>
 
 <!DOCTYPE html>
