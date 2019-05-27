@@ -1,4 +1,9 @@
 <?php
+
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
 require_once("helpers.php");
 require_once("functions.php");
 
@@ -10,8 +15,6 @@ else {
 }
 
 set_timezone("Asia/Yekaterinburg");
-
-$user_name = "Андрей";
 
 $categories = get_categories();
 

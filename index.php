@@ -3,8 +3,11 @@ require_once("init.php");
 
 set_timezone("Asia/Yekaterinburg");
 
-$user_name = "Андрей"; // укажите здесь ваше имя
 $title = "Главная";
+
+if (isset($_SESSION['user']['name'])) {
+  $user_name = $_SESSION['user']['name'];
+}
 
 $categories = get_categories();
 $lots = get_lots();
@@ -20,7 +23,6 @@ $main_content = include_template(
 $layout = include_template(
   "layout.php",
   [
-    "user_name"    => $user_name,
     "title"        => $title,
     "main_content" => $main_content,
     "categories"   => $categories

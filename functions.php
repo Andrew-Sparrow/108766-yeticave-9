@@ -131,7 +131,7 @@ function format_number($number): string {
  *        to a prepared statement
  * @return an array
  */
-function db_fetch_data($sql, $data = []) {
+function db_fetch_data($sql, $data = []):array {
   $link = DbConnectionProvider::getConnection();
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -227,6 +227,24 @@ function get_current_price($lot_id) {
   $price = db_fetch_data($sql, [$lot_id, $lot_id]);
   
   return $price[0]['max_price'];
+}
+
+/**
+ * This function returns user
+ *
+ * @return array
+ */
+function getUser() {
+  
+  $enter = [
+    'email'    => $_POST['email'] ?? '',
+    'password' => $_POST['password'] ?? ''
+  ];
+  
+  $sql = 'select id, name, password from users where email = ?';
+  $user = db_fetch_data($sql, [$enter['email']]);
+  
+  return $user[0] ?? null;
 }
 
 

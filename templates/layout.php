@@ -1,5 +1,6 @@
 <?php
-$is_auth = 1;
+$is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
+$user_name = $_SESSION['user']['name'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +24,7 @@ $is_auth = 1;
         <input type="search" name="search" placeholder="Поиск лота">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
-      <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
+      <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
       
       <nav class="user-menu">
         
@@ -32,7 +33,7 @@ $is_auth = 1;
           <div class="user-menu__logged">
             <p><?= strip_tags($user_name) ?></p>
             <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
-            <a class="user-menu__logout" href="#">Выход</a>
+            <a class="user-menu__logout" href="logout.php">Выход</a>
           </div>
         <?php else: ?>
           <ul class="user-menu__list">
@@ -40,7 +41,7 @@ $is_auth = 1;
               <a href="#">Регистрация</a>
             </li>
             <li class="user-menu__item">
-              <a href="#">Вход</a>
+              <a href="enter.php">Вход</a>
             </li>
           </ul>
         <?php endif; ?>
@@ -109,7 +110,7 @@ $is_auth = 1;
         </svg>
       </a>
     </div>
-    <a class="main-footer__add-lot button" href="add-lot.html">Добавить лот</a>
+    <a class="main-footer__add-lot button" href="add.php">Добавить лот</a>
     <div class="main-footer__developed-by">
       <span class="visually-hidden">Разработано:</span>
       <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">
