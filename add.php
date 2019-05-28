@@ -9,7 +9,7 @@ if (!isset($_SESSION['user'])) {
   exit();
 }
 
-if(isset($_SESSION['user'])) {
+if (isset($_SESSION['user'])) {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $lot = [
@@ -83,11 +83,11 @@ if(isset($_SESSION['user'])) {
       $errors['lot-picture'] = 'Размер файла превысил допустимое значение';
     }
     //if post_max_size=0 (unlimited)
-    elseif ( empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0 ) {
+    elseif (empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0) {
       
       $displayMaxSize = ini_get('post_max_size');
       
-      switch ( substr($displayMaxSize,-1) ) {
+      switch (substr($displayMaxSize, -1)) {
         case 'G':
           $displayMaxSize = intval($displayMaxSize) * 1024;
         case 'M':
@@ -96,8 +96,8 @@ if(isset($_SESSION['user'])) {
           $displayMaxSize = intval($displayMaxSize) * 1024;
       }
       
-      $errors['lot-picture'] = 'размер файла- '. $_SERVER['CONTENT_LENGTH'].
-        ' bytes превышает максимальный размер '. $displayMaxSize.' bytes.' . 'в настройках сервера' ;
+      $errors['lot-picture'] = 'размер файла- ' . $_SERVER['CONTENT_LENGTH'] .
+        ' bytes превышает максимальный размер ' . $displayMaxSize . ' bytes.' . 'в настройках сервера';
     }
     
     //verifying MIME type of file
@@ -115,7 +115,7 @@ if(isset($_SESSION['user'])) {
       }
     }
     // if no errors
-    if(empty($errors)) {
+    if (empty($errors)) {
       $file_extension = pathinfo($_FILES['lot-picture']['name'], PATHINFO_EXTENSION);
       
       $filename = 'uploads/' . uniqid() . '.' . $file_extension;
@@ -144,16 +144,25 @@ if(isset($_SESSION['user'])) {
     }
   }
   
-  $add_content = include_template(
+  $page_title = 'Добавление лота';
+  
+  $content = include_template(
     "add_content.php",
     [
-      "lot"        => $lot,
-      "errors"     => $errors,
-      "categories" => $categories,
-      "user_name"  => $user_name
+      "lot"    => $lot,
+      "errors" => $errors
     ]
   );
   
-  print($add_content);
+  $layout = include_template(
+    'simple_layout.php',
+    [
+      'page_title' => $page_title,
+      'content'    => $content,
+      'categories' => $categories
+    ]
+  );
+  
+  print ($layout);
 }
 
