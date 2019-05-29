@@ -33,7 +33,7 @@ $lot = get_lot($lot_id);
 
 $current_price = get_current_price($lot_id);
 
-$min_rate = $current_price + $lot['step'];
+$min_rate = $current_price + $lot['step'] + 1;
 
 $new_bet = [];
 
@@ -49,25 +49,46 @@ if (is_null($lot)) {
 if (isset($_SESSION['user'])) {
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $new_bet = [
-      'cost' => $_POST['cost'] ?? null
-    ];
-  
+    $new_bet = $_POST['cost'] ?? null;
     
-    if (!is_numeric($new_bet['cost'])) {
-      $errors['cost'] = 'Введите число';
-    }
-    elseif ($new_bet['cost'] <= 0 ) {
-      $errors['cost'] = 'Введите число больше нуля';
-    }
-    elseif (empty($new_bet['cost'])) {
+    //if $new_bet equals zero it will be empty($new_bet) == true
+    if (empty($new_bet)) {
       $errors['cost'] = 'Это поле надо заполнить';
     }
-    $new_bet['cost'] = intval(trim($new_bet['cost']));
+    elseif (!is_numeric($new_bet)) {
+      $errors['cost'] = 'Введите число';
+    }
+    elseif ($new_bet < 0) {
+      $errors['cost'] = 'Введите число больше нуля';
+    }
+    elseif ($new_bet < $min_rate) {
+      $errors['cost'] = 'Значение должно быть больше либо равно минимальной ставке';
+    }
+    elseif (!ctype_digit($new_bet)) {
+      $errors['cost'] = 'Введите целое число';
+    }
     
-    var_dump($new_bet);
+    if (empty($errors)) {
+      $new_bet = intval(trim($new_bet));
+      
+      $sql = "INSERT INTO rates (rate, user_id, lot_id)
+        VALUES ( ?, ?, ?)";
+      
+      $user_id = $_SESSION['user']['id'];
+      
+      $bet = db_insert_data(
+        $sql,
+        [
+          $new_bet,
+          $user_id,
+          $lot_id
+        ]
+      );
+    }
   }
 }
+
+$bets = get_bets($lot_id);
 
 $page_title = strip_tags($lot['title']);
 
@@ -77,6 +98,7 @@ $content = include_template(
     "lot"           => $lot,
     "current_price" => $current_price,
     "min_rate"      => $min_rate,
+    "bets"          => $bets,
     "errors"        => $errors
   ]
 );

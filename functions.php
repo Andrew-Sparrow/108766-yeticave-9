@@ -131,7 +131,7 @@ function format_number($number): string {
  *        to a prepared statement
  * @return an array
  */
-function db_fetch_data($sql, $data = []):array {
+function db_fetch_data($sql, $data = []): array {
   $link = DbConnectionProvider::getConnection();
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -247,4 +247,89 @@ function getUser() {
   return $user[0] ?? null;
 }
 
+/**
+ * This function returns array of bets for specific lot by lot's id
+ *
+ * @return array of bets
+ */
+function get_bets($lot_id): array {
+  $sql = "SELECT rates.id AS rate_id, rates.dt_add AS data_rate, rate AS rate , users.name as user_name
+          FROM rates
+          JOIN users ON users.id = rates.user_id
+          WHERE lot_id = ?
+          ORDER BY rates.dt_add desc
+          LIMIT 10";
+  $bets = db_fetch_data($sql, [$lot_id]);
+  return $bets;
+}
 
+/**
+ * This function calculates time difference from current time
+ * by using a predefined set of rules which determine
+ * the second, minute, hour, day, month and year.
+ *
+ * @param $time string
+ *
+ * @return string time
+ */
+function get_time_ago($time) {
+  
+  $time_difference = time() - strtotime($time);
+  
+  $condition = array(
+    60 * 60 => 'час',
+    60      => 'минута',
+    1       => 'секунда'
+  );
+  
+  if ($time_difference < 1) {
+    return 'меньше чем 1 секунду назад';
+  }
+  
+  foreach ($condition as $secs => $str) {
+    $time_unit = $time_difference / $secs;
+    
+    if ($time_unit >= 1) {
+      $new_time = round($time_unit);
+      
+      if ($str === 'секунда') {
+        $str = get_noun_plural_form($new_time, 'секунда', 'секунды', 'секунд');
+      }
+      if ($str === 'минута') {
+        $str = get_noun_plural_form($new_time, 'минута', 'минуты', 'минут');
+      }
+      if ($str === 'час') {
+        $str = get_noun_plural_form($new_time, 'час', 'часа', 'часов');
+      }
+      
+      if ($time_difference > 60*60*24 ){
+        return date_format(date_create($time), "d/m/y в H:i");
+      }
+      
+      return $new_time . ' ' . $str  . ' назад';
+    }
+  }
+}
+
+
+/**
+ * This function returns array of bets for specific user by user's id
+ *
+ * @param $user_id int
+ *
+ * @return array of bets
+ */
+function get_user_bets($user_id): array {
+  $sql = "SELECT rates.id AS rate_id, date_format(rates.dt_add, '%d.%m.%y') AS data_rate,
+            rate AS rate , lots.title AS lot_title, categories.title AS category_title,
+            lots.img_src AS lot_img, lots.end_date as lot_end_date
+          FROM rates
+          JOIN users ON users.id = rates.user_id
+          JOIN lots ON lots.id = rates.lot_id
+          JOIN categories ON categories.id = lots.category_id
+          WHERE users.id = ?
+          ORDER BY rates.dt_add desc";
+  
+  $bets = db_fetch_data($sql, [$user_id]);
+  return $bets;
+}
