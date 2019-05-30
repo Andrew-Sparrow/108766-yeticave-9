@@ -333,3 +333,20 @@ function get_user_bets($user_id): array {
   $bets = db_fetch_data($sql, [$user_id]);
   return $bets;
 }
+
+/**
+ * This function returns array of winners
+ *
+ * @return array of winners
+ */
+function get_winners(): array {
+  $sql = "SELECT lots.id as lot_id , lots.title AS lot_title, lots.end_date AS lot_end_date , rates.rate AS win_rate , rates.user_id AS win_user_id
+          FROM lots
+          JOIN rates
+          ON lots.id = rates.lot_id
+          WHERE winner_id IS NULL AND lots.end_date <= CURDATE()
+          and rates.dt_add in (SELECT MAX(rates.dt_add) from rates GROUP BY lot_id);";
+  
+  $winners = db_fetch_data($sql);
+  return $winners;
+}
