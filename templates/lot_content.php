@@ -23,7 +23,10 @@
       </p>
     </div>
     <div class="lot-item__right">
-      <?php if(isset($_SESSION['user'])): ?>
+      <?php if(isset($_SESSION['user'])
+               && $is_end_date_in_future
+               && $is_lot_author_other_user
+               && $is_user_last_bet_other) : ?>
       <div class="lot-item__state">
         <div class="lot-item__timer timer
           <?php if (isset($lot['end_date'])): ?>

@@ -88,18 +88,33 @@ if (isset($_SESSION['user'])) {
   }
 }
 
+//verify if lot's end_date in the future
+$is_end_date_in_future = date_create($lot['end_date']) > new DateTime("now");
+
+$is_lot_author_other_user = $_SESSION['user']['id'] != $lot['author_id'];
+
 $bets = get_bets($lot_id);
+
+//verify if last bet made by other user than this one,
+// if there is no one bets than true
+$is_user_last_bet_other = true;
+if (!empty($bets)) {
+  $is_user_last_bet_other = $_SESSION['user']['id'] != $bets[0]['user_id'];
+}
 
 $page_title = strip_tags($lot['title']);
 
 $content = include_template(
   "lot_content.php",
   [
-    "lot"           => $lot,
-    "current_price" => $current_price,
-    "min_rate"      => $min_rate,
-    "bets"          => $bets,
-    "errors"        => $errors
+    "lot"                      => $lot,
+    "current_price"            => $current_price,
+    "min_rate"                 => $min_rate,
+    "bets"                     => $bets,
+    "errors"                   => $errors,
+    "is_end_date_in_future"    => $is_end_date_in_future,
+    "is_lot_author_other_user" => $is_lot_author_other_user,
+    "is_user_last_bet_other"   => $is_user_last_bet_other
   ]
 );
 

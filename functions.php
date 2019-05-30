@@ -199,7 +199,7 @@ function get_lots(): array {
 function get_lot($lot_id) {
   $sql = "SELECT lots.id , categories.title AS category,
           lots.description, start_price, lots.title as title,
-          img_src, end_date, step
+          img_src, end_date as end_date, step, author_id
           FROM lots
           JOIN categories ON categories.id = lots.category_id
           where lots.id = ?";
@@ -253,7 +253,11 @@ function getUser() {
  * @return array of bets
  */
 function get_bets($lot_id): array {
-  $sql = "SELECT rates.id AS rate_id, rates.dt_add AS data_rate, rate AS rate , users.name as user_name
+  $sql = "SELECT rates.id AS rate_id,
+                 rates.user_id as user_id,
+                 rates.dt_add AS data_rate,
+                 rate AS rate ,
+                 users.name as user_name
           FROM rates
           JOIN users ON users.id = rates.user_id
           WHERE lot_id = ?
