@@ -9,9 +9,6 @@ if (isset($_SESSION['user'])) {
   $user_id = $_SESSION['user']['id'];
   
   $user_bets = get_user_bets($user_id);
-  
-  var_dump($user_bets);
-  
 }
 
 $content = include_template(

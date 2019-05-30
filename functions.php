@@ -183,7 +183,10 @@ function get_categories(): array {
  * @return array of lots
  */
 function get_lots(): array {
-  $sql = 'SELECT lots.id as lot_id, lots.title as lot_title, start_price , img_src
+  $sql = 'SELECT lots.id as lot_id,
+           lots.title as lot_title,
+           start_price ,
+           img_src
           FROM lots';
   $lots = db_fetch_data($sql);
   return $lots;
@@ -197,9 +200,15 @@ function get_lots(): array {
  * @return array of properties of lot
  */
 function get_lot($lot_id) {
-  $sql = "SELECT lots.id , categories.title AS category,
-          lots.description, start_price, lots.title as title,
-          img_src, end_date as end_date, step, author_id
+  $sql = "SELECT lots.id ,
+            categories.title AS category,
+            lots.description,
+            start_price,
+            lots.title as title,
+            img_src, end_date as end_date,
+            step,
+            author_id,
+            winner_id
           FROM lots
           JOIN categories ON categories.id = lots.category_id
           where lots.id = ?";
@@ -208,6 +217,27 @@ function get_lot($lot_id) {
   
   return $lot[0] ?? null;
 }
+
+/**
+ * This function returns a lot-item by id,
+ * like array of its properties
+ * if lot exists or null
+ *
+ * @return string contact of lot's author
+ */
+function get_lot_author_contact($lot_id) {
+  $sql = "SELECT lots.id ,
+            author_id,
+            users.contact
+          FROM lots
+          JOIN users ON users.id = lots.author_id
+          where lots.id = ?";
+  
+  $lot = db_fetch_data($sql, [$lot_id]);
+  
+  return $lot[0]['contact'] ?? null;
+}
+
 
 /**
  * This function returns current price of lot by lot's id
@@ -324,9 +354,15 @@ function get_time_ago($time) {
  * @return array of bets
  */
 function get_user_bets($user_id): array {
-  $sql = "SELECT rates.id AS rate_id, date_format(rates.dt_add, '%d.%m.%y') AS data_rate,
-            rate AS rate , lots.title AS lot_title, categories.title AS category_title,
-            lots.img_src AS lot_img, lots.end_date as lot_end_date
+  $sql = "SELECT rates.id AS rate_id,
+           date_format(rates.dt_add, '%d.%m.%y') AS data_rate,
+           rate AS rate,
+           lots.id as lot_id,
+           lots.title AS lot_title,
+           categories.title AS category_title,
+           lots.img_src AS lot_img,
+           lots.end_date as lot_end_date,
+           lots.winner_id as winner_id
           FROM rates
           JOIN users ON users.id = rates.user_id
           JOIN lots ON lots.id = rates.lot_id
@@ -344,7 +380,11 @@ function get_user_bets($user_id): array {
  * @return array of winners
  */
 function get_winners(): array {
-  $sql = "SELECT lots.id as lot_id , lots.title AS lot_title, lots.end_date AS lot_end_date , rates.rate AS win_rate , rates.user_id AS win_user_id
+  $sql = "SELECT lots.id as lot_id ,
+            lots.title AS lot_title,
+            lots.end_date AS lot_end_date ,
+            rates.rate AS win_rate ,
+            rates.user_id AS win_user_id
           FROM lots
           JOIN rates
           ON lots.id = rates.lot_id
