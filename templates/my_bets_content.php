@@ -11,11 +11,11 @@ require_once ("functions.php");
         <tr class="rates__item<?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' rates__item--win': ''?>">
           <td class="rates__info">
             <div class="rates__img">
-              <img src="<?= $bet['lot_img'] ?>" width="54" height="40" alt="Сноуборд">
+              <img src="<?= $bet['lot_img'] ?>" width="54" height="40" alt="">
             </div>
             <div>
               <h3 class="rates__title">
-                <a href="lot.html"><?= $bet['lot_title'] ?></a>
+                <a href="/lot.php?id=<?=$bet['lot_id']?>"><?= $bet['lot_title'] ?></a>
               </h3>
               <p><?= $_SESSION['user']['id'] === $bet['winner_id'] ? "$contact": ''?></p>
             </div>

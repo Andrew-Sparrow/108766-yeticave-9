@@ -205,7 +205,8 @@ function get_lot($lot_id) {
             lots.description,
             start_price,
             lots.title as title,
-            img_src, end_date as end_date,
+            img_src,
+            end_date as end_date,
             step,
             author_id,
             winner_id
