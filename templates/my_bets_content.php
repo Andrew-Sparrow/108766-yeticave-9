@@ -25,11 +25,11 @@ require_once ("functions.php");
           </td>
           <td class="rates__timer">
             <div class="timer <?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' timer--win': 'timer--finishing'?>">
-              <?= $bet['lot_end_date'] ?>
+              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date']?>
             </div>
           </td>
           <td class="rates__price">
-            <?= $bet['rate'] ?>
+            <?= format_number($bet['rate']) . ' p'?>
           </td>
           <td class="rates__time">
             <?= $bet['data_rate'] ?>
