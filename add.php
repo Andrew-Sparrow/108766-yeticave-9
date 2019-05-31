@@ -122,7 +122,7 @@ if (isset($_SESSION['user'])) {
       
       $sql = "INSERT INTO lots (title, category_id, description, author_id,
            start_price, end_date, step, img_src)
-        VALUES ( ?, ?,  ?, 1 , ?, ?, ?, ?)";
+        VALUES ( ?, ?,  ?, ? , ?, ?, ?, ?)";
       
       $new_lot_id = db_insert_data(
         $sql,
@@ -130,6 +130,7 @@ if (isset($_SESSION['user'])) {
           $lot['title'],
           $lot['category_id'],
           $lot['description'],
+          $_SESSION['user']['id'],
           $lot['start_price'],
           $lot['end_date'],
           $lot['lot_step'],
@@ -150,7 +151,8 @@ if (isset($_SESSION['user'])) {
     "add_content.php",
     [
       "lot"    => $lot,
-      "errors" => $errors
+      "errors" => $errors,
+      "categories" => $categories
     ]
   );
   

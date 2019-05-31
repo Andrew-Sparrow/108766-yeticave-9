@@ -1,7 +1,7 @@
 <?php
-$user_name = $_SESSION['user']['name'] ?? '';
 ?>
-<form class="form form--add-lot container <?= isset($errors) ? "form--invalid" : "" ?>  method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+
+<form class="form form--add-lot container <?= isset($errors) ? "form--invalid" : "" ?>"  method="post" enctype="multipart/form-data"> <!-- form--invalid -->
 <h2>Добавление лота</h2>
 <div class="form__container-two">
   <?php

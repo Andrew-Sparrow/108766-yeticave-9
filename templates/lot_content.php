@@ -65,18 +65,20 @@
         </form>
       </div>
       <?php endif; ?>
-      <div class="history">
-        <h3>История ставок (<span>10</span>)</h3>
-        <table class="history__list">
-          <?php foreach($bets as $bet): ?>
-            <tr class="history__item">
-              <td class="history__name"><?= $bet['user_name'] ?></td>
-              <td class="history__price"><?= format_number($bet['rate']) ?> p </td>
-              <td class="history__time"><?= get_time_ago($bet['data_rate']) ?></td>
-            </tr>
-          <?php endforeach; ?>
-        </table>
-      </div>
+      <?php if(!empty($bets) ): ?>
+        <div class="history">
+          <h3>История ставок (<span><?= count($bets)?></span>)</h3>
+          <table class="history__list">
+            <?php foreach($bets as $bet): ?>
+              <tr class="history__item">
+                <td class="history__name"><?= $bet['user_name'] ?></td>
+                <td class="history__price"><?= format_number($bet['rate']) ?> p </td>
+                <td class="history__time"><?= get_time_ago($bet['data_rate']) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </table>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 </section>
