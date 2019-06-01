@@ -14,10 +14,7 @@ $sql_winners = "SELECT lots.id as lot_id , lots.title AS lot_title, lots.end_dat
 
 $sql_update_winners = "UPDATE lots SET winner_id = ? WHERE lots.id = ?;";
 
-//может быть здесь транзакции и не нужны
 foreach ($winners as $key => $val) {
-  
-  mysqli_begin_transaction($link);
   
   $query_win = mysqli_query($link, $sql_winners);
   
@@ -25,12 +22,5 @@ foreach ($winners as $key => $val) {
   
   $stmt = db_get_prepare_stmt($link, $sql_update_winners, $data);
   $result = mysqli_stmt_execute($stmt);
-  
-  if ($query_win && $result) {
-    mysqli_commit($link);
-  }
-  else {
-    mysqli_rollback($link);
-  }
-}
+ }
 

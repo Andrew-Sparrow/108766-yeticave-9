@@ -39,6 +39,15 @@ $new_bet = [];
 
 $errors = [];
 
+$is_lot_author_other_user = false;
+
+$is_user_last_bet_other = false ;
+
+$bets = get_bets($lot_id);
+
+$last_bet = get_last_bet($lot_id);
+
+
 //вывод страницы 404, если нет lot'а с таким id
 if (is_null($lot)) {
   http_response_code(404);
@@ -46,7 +55,7 @@ if (is_null($lot)) {
   exit();
 }
 
-if (isset($_SESSION['user'])) {
+if ($is_user_auth) {
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $new_bet = $_POST['cost'] ?? null;
@@ -75,6 +84,12 @@ if (isset($_SESSION['user'])) {
         VALUES ( ?, ?, ?)";
       
       $user_id = $_SESSION['user']['id'];
+  
+      $is_lot_author_other_user = $_SESSION['user']['id'] != $lot['author_id'];
+  
+      //for showing or not block of entering new bet
+      //verify if last bet made by other user than this one
+      $is_user_last_bet_other = $_SESSION['user']['id'] != $last_bet['user_id'];
       
       $bet = db_insert_data(
         $sql,
@@ -90,17 +105,6 @@ if (isset($_SESSION['user'])) {
 
 //verify if lot's end_date in the future
 $is_end_date_in_future = date_create($lot['end_date']) > new DateTime("now");
-
-$is_lot_author_other_user = $_SESSION['user']['id'] != $lot['author_id'];
-
-$bets = get_bets($lot_id);
-
-//verify if last bet made by other user than this one,
-// if there is no one bets than true
-$is_user_last_bet_other = true;
-if (!empty($bets)) {
-  $is_user_last_bet_other = $_SESSION['user']['id'] != $bets[0]['user_id'];
-}
 
 $page_title = strip_tags($lot['title']);
 

@@ -187,7 +187,8 @@ function get_lots(): array {
            lots.title as lot_title,
            start_price ,
            img_src
-          FROM lots';
+          FROM lots
+          WHERE winner_id IS NULL AND lots.end_date > CURDATE()';
   $lots = db_fetch_data($sql);
   return $lots;
 }
@@ -218,27 +219,6 @@ function get_lot($lot_id) {
   
   return $lot[0] ?? null;
 }
-
-/**
- * This function returns a lot-item by id,
- * like array of its properties
- * if lot exists or null
- *
- * @return string contact of lot's author
- */
-function get_lot_author_contact($lot_id) {
-  $sql = "SELECT lots.id ,
-            author_id,
-            users.contact
-          FROM lots
-          JOIN users ON users.id = lots.author_id
-          where lots.id = ?";
-  
-  $lot = db_fetch_data($sql, [$lot_id]);
-  
-  return $lot[0]['contact'] ?? null;
-}
-
 
 /**
  * This function returns current price of lot by lot's id
@@ -279,9 +259,9 @@ function getUser() {
 }
 
 /**
- * This function returns array of bets for specific lot by lot's id
+ * This function returns array of last_bet for specific lot by lot's id
  *
- * @return array of bets
+ * @return array of last_bet
  */
 function get_bets($lot_id): array {
   $sql = "SELECT rates.id AS rate_id,
@@ -297,6 +277,28 @@ function get_bets($lot_id): array {
   $bets = db_fetch_data($sql, [$lot_id]);
   return $bets;
 }
+
+
+/**
+ * This function returns array of data of last bet for specific lot by lot's id
+ *
+ * @param $lot_id int
+ *
+ * @return array
+ */
+function get_last_bet($lot_id): array {
+  $sql = "SELECT rates.id AS rate_id,
+                 rates.user_id as user_id,
+                 rates.dt_add AS data_rate
+          FROM rates
+          JOIN users ON users.id = rates.user_id
+          WHERE lot_id = ?
+          ORDER BY rates.dt_add desc
+          LIMIT 1";
+  $bets = db_fetch_data($sql, [$lot_id]);
+  return $bets;
+}
+
 
 /**
  * This function calculates time difference from current time
@@ -348,11 +350,11 @@ function get_time_ago($time) {
 
 
 /**
- * This function returns array of bets for specific user by user's id
+ * This function returns array of last_bet for specific user by user's id
  *
  * @param $user_id int
  *
- * @return array of bets
+ * @return array of last_bet
  */
 function get_user_bets($user_id): array {
   $sql = "SELECT rates.id AS rate_id,
@@ -363,12 +365,13 @@ function get_user_bets($user_id): array {
            categories.title AS category_title,
            lots.img_src AS lot_img,
            lots.end_date as lot_end_date,
-           lots.winner_id as winner_id
+           lots.winner_id as winner_id,
+           users.contact as author_contact
           FROM rates
-          JOIN users ON users.id = rates.user_id
           JOIN lots ON lots.id = rates.lot_id
+          JOIN users ON users.id = lots.author_id
           JOIN categories ON categories.id = lots.category_id
-          WHERE users.id = ?
+          WHERE rates.user_id = ?
           ORDER BY rates.dt_add desc";
   
   $bets = db_fetch_data($sql, [$user_id]);
@@ -376,9 +379,12 @@ function get_user_bets($user_id): array {
 }
 
 /**
- * This function returns array of winners
+ * This function returns array of lots without winners and date of ending
+ * less or equals today.
  *
- * @return array of winners
+ * This needs for further adding winners to that lots.
+ *
+ * @return array of lots without winners
  */
 function get_winners(): array {
   $sql = "SELECT lots.id as lot_id ,
@@ -390,7 +396,9 @@ function get_winners(): array {
           JOIN rates
           ON lots.id = rates.lot_id
           WHERE winner_id IS NULL AND lots.end_date <= CURDATE()
-          and rates.dt_add in (SELECT MAX(rates.dt_add) from rates GROUP BY lot_id);";
+          and rates.dt_add in (SELECT MAX(rates.dt_add) from rates GROUP BY lot_id)
+          ORDER BY lots.end_date
+          LIMIT 50;";
   
   $winners = db_fetch_data($sql);
   return $winners;

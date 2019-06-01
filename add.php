@@ -4,12 +4,12 @@ require_once("init.php");
 $lot = [];
 $errors = [];
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']['id'])) {
   http_response_code(403);
   exit();
 }
 
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['user']['id'])) {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $lot = [

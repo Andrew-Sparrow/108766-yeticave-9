@@ -4,7 +4,13 @@ require_once("init.php");
 $page_title = 'Мои ставки';
 $user_bets = [];
 
-if (isset($_SESSION['user'])) {
+
+if (!isset($_SESSION['user']['id'])) {
+  http_response_code(403);
+  exit();
+}
+
+if (isset($_SESSION['user']['id'])) {
   
   $user_id = $_SESSION['user']['id'];
   

@@ -1,5 +1,4 @@
 <?php
-require_once ("functions.php");
 ?>
 
 <section class="rates container">
@@ -7,7 +6,7 @@ require_once ("functions.php");
   <table class="rates__list">
     <?php if(isset($user_bets)): ?>
       <?php foreach($user_bets as $bet): ?>
-        <?php $contact = get_lot_author_contact($bet['lot_id'])?>
+      <?php $author_contact = $bet['author_contact'] ?? '' ?>
         <tr class="rates__item<?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' rates__item--win': ''?>">
           <td class="rates__info">
             <div class="rates__img">
@@ -15,21 +14,21 @@ require_once ("functions.php");
             </div>
             <div>
               <h3 class="rates__title">
-                <a href="/lot.php?id=<?=$bet['lot_id']?>"><?= $bet['lot_title'] ?></a>
+                <a href="/lot.php?id=<?=$bet['lot_id']?>"><?= strip_tags($bet['lot_title']) ?></a>
               </h3>
-              <p><?= $_SESSION['user']['id'] === $bet['winner_id'] ? "$contact": ''?></p>
+              <p><?= $_SESSION['user']['id'] === $bet['winner_id'] ? strip_tags($author_contact): ''?></p>
             </div>
           </td>
           <td class="rates__category">
-            <?= $bet['category_title'] ?>
+            <?= $bet['category_title'] ?? ''?>
           </td>
           <td class="rates__timer">
             <div class="timer <?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' timer--win': 'timer--finishing'?>">
-              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date']?>
+              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date'] ?? ''?>
             </div>
           </td>
           <td class="rates__price">
-            <?= format_number($bet['rate']) . ' p'?>
+            <?= format_number(intval($bet['rate'])) ?? '' . ' p'?>
           </td>
           <td class="rates__time">
             <?= $bet['data_rate'] ?>
