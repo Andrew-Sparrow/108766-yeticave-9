@@ -3,9 +3,13 @@ require_once 'init.php';
 
 $link = DbConnectionProvider::getConnection();
 
-$winners = get_winners();
+$winners = get_lots_without_winners();
 
-$sql_winners = "SELECT lots.id as lot_id , lots.title AS lot_title, lots.end_date AS lot_end_date , rates.rate AS win_rate , rates.user_id AS win_user_id
+$sql_lots_without_winners = "SELECT lots.id as lot_id ,
+                 lots.title AS lot_title,
+                 lots.end_date AS lot_end_date,
+                 rates.rate AS win_rate,
+                 rates.user_id AS win_user_id
                 FROM lots
                 JOIN rates
                 ON lots.id = rates.lot_id
@@ -16,7 +20,7 @@ $sql_update_winners = "UPDATE lots SET winner_id = ? WHERE lots.id = ?;";
 
 foreach ($winners as $key => $val) {
   
-  $query_win = mysqli_query($link, $sql_winners);
+  $query_win = mysqli_query($link, $sql_lots_without_winners);
   
   $data = [$val['win_user_id'], $val['lot_id']];
   

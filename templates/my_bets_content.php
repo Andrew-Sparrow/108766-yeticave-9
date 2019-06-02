@@ -7,7 +7,7 @@
     <?php if(isset($user_bets)): ?>
       <?php foreach($user_bets as $bet): ?>
       <?php $author_contact = $bet['author_contact'] ?? '' ?>
-        <tr class="rates__item<?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' rates__item--win': ''?>">
+        <tr class="rates__item<?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' rates__item--win': ' rates__item--end'?>">
           <td class="rates__info">
             <div class="rates__img">
               <img src="<?= $bet['lot_img'] ?>" width="54" height="40" alt="">

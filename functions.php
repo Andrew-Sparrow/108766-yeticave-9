@@ -386,7 +386,7 @@ function get_user_bets($user_id): array {
  *
  * @return array of lots without winners
  */
-function get_winners(): array {
+function get_lots_without_winners(): array {
   $sql = "SELECT lots.id as lot_id ,
             lots.title AS lot_title,
             lots.end_date AS lot_end_date ,
