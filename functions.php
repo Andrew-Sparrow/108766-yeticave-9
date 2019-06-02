@@ -379,12 +379,12 @@ function get_user_bets($user_id): array {
 }
 
 /**
- * This function returns array of lots without winners and date of ending
+ * This function returns array of lots without lots_without_winners and date of ending
  * less or equals today.
  *
- * This needs for further adding winners to that lots.
+ * This needs for further adding lots_without_winners to that lots.
  *
- * @return array of lots without winners
+ * @return array of lots without lots_without_winners
  */
 function get_lots_without_winners(): array {
   $sql = "SELECT lots.id as lot_id ,

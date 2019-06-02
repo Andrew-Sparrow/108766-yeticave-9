@@ -3,7 +3,7 @@ require_once 'init.php';
 
 $link = DbConnectionProvider::getConnection();
 
-$winners = get_lots_without_winners();
+$lots_without_winners = get_lots_without_winners();
 
 $sql_lots_without_winners = "SELECT lots.id as lot_id ,
                  lots.title AS lot_title,
@@ -18,7 +18,7 @@ $sql_lots_without_winners = "SELECT lots.id as lot_id ,
 
 $sql_update_winners = "UPDATE lots SET winner_id = ? WHERE lots.id = ?;";
 
-foreach ($winners as $key => $val) {
+foreach ($lots_without_winners as $key => $val) {
   
   $query_win = mysqli_query($link, $sql_lots_without_winners);
   
