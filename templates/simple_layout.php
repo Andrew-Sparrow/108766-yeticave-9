@@ -25,8 +25,8 @@ $user_name = $_SESSION['user']['name'] ?? '';
       <a class="main-header__logo" href="index.php">
         <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
       </a>
-      <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
-        <input type="search" name="search" placeholder="Поиск лота">
+      <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
+        <input type="search" name="search" placeholder="Поиск лота" value="<?= $_GET['search'] ?? ''?>">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
       <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
@@ -36,7 +36,7 @@ $user_name = $_SESSION['user']['name'] ?? '';
         <?php if($is_auth === 1): ?>
           <div class="user-menu__logged">
             <p><?= strip_tags($user_name) ?></p>
-            <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
+            <a class="user-menu__bets" href="my_bets.php">Мои ставки</a>
             <a class="user-menu__logout" href="logout.php">Выход</a>
           </div>
         <?php else: ?>

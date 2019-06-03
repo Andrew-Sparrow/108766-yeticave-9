@@ -18,3 +18,5 @@ set_timezone("Asia/Yekaterinburg");
 
 $categories = get_categories();
 
+$is_user_auth = isset($_SESSION['user']['id']) ? true : false ;
+

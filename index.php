@@ -1,7 +1,6 @@
 <?php
 require_once("init.php");
-
-set_timezone("Asia/Yekaterinburg");
+require_once ("winner.php");
 
 $title = "Главная";
 
@@ -30,3 +29,4 @@ $layout = include_template(
 );
 
 print($layout);
+

@@ -131,7 +131,7 @@ function format_number($number): string {
  *        to a prepared statement
  * @return an array
  */
-function db_fetch_data($sql, $data = []):array {
+function db_fetch_data($sql, $data = []): array {
   $link = DbConnectionProvider::getConnection();
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -167,6 +167,25 @@ function db_insert_data($sql, $data = []) {
 }
 
 /**
+ * This function update data
+ *
+ * @param $link mysqli an object which represents the connection to a MySQL Server.
+ * @param $sql string This parameter can include one or more
+ *        parameter markers in the SQL statement by embedding
+ *        question mark (?) characters at the appropriate positions.
+ * @param $data an array of prepared variables for bindig this variables
+ *        to a prepared statement
+ * @return returns TRUE on success or FALSE on failure
+ */
+function db_update_data($sql, $data = []) {
+  $link = DbConnectionProvider::getConnection();
+  $stmt = db_get_prepare_stmt($link, $sql, $data);
+  $result = mysqli_stmt_execute($stmt);
+  
+  return $result;
+}
+
+/**
  * This function returns array of categories
  *
  * @return array of categories
@@ -183,8 +202,12 @@ function get_categories(): array {
  * @return array of lots
  */
 function get_lots(): array {
-  $sql = 'SELECT lots.id as lot_id, lots.title as lot_title, start_price , img_src
-          FROM lots';
+  $sql = 'SELECT lots.id as lot_id,
+           lots.title as lot_title,
+           start_price ,
+           img_src
+          FROM lots
+          WHERE winner_id IS NULL AND lots.end_date > CURDATE()';
   $lots = db_fetch_data($sql);
   return $lots;
 }
@@ -197,9 +220,16 @@ function get_lots(): array {
  * @return array of properties of lot
  */
 function get_lot($lot_id) {
-  $sql = "SELECT lots.id , categories.title AS category,
-          lots.description, start_price, lots.title as title,
-          img_src, end_date, step
+  $sql = "SELECT lots.id ,
+            categories.title AS category,
+            lots.description,
+            start_price,
+            lots.title as title,
+            img_src,
+            end_date as end_date,
+            step,
+            author_id,
+            winner_id
           FROM lots
           JOIN categories ON categories.id = lots.category_id
           where lots.id = ?";
@@ -247,4 +277,148 @@ function getUser() {
   return $user[0] ?? null;
 }
 
+/**
+ * This function returns array of last_bet for specific lot by lot's id
+ *
+ * @return array of last_bet
+ */
+function get_bets($lot_id): array {
+  $sql = "SELECT rates.id AS rate_id,
+                 rates.user_id as user_id,
+                 rates.dt_add AS data_rate,
+                 rate AS rate ,
+                 users.name as user_name
+          FROM rates
+          JOIN users ON users.id = rates.user_id
+          WHERE lot_id = ?
+          ORDER BY rates.dt_add desc
+          LIMIT 10";
+  $bets = db_fetch_data($sql, [$lot_id]);
+  return $bets;
+}
 
+
+/**
+ * This function returns array of data of last bet for specific lot by lot's id
+ *
+ * @param $lot_id int
+ *
+ * @return array
+ */
+function get_last_bet($lot_id): array {
+  $sql = "SELECT rates.id AS rate_id,
+                 rates.user_id as user_id,
+                 rates.dt_add AS data_rate
+          FROM rates
+          JOIN users ON users.id = rates.user_id
+          WHERE lot_id = ?
+          ORDER BY rates.dt_add desc
+          LIMIT 1";
+  $bets = db_fetch_data($sql, [$lot_id]);
+  return $bets;
+}
+
+
+/**
+ * This function calculates time difference from current time
+ * by using a predefined set of rules which determine
+ * the second, minute, hour, day, month and year.
+ *
+ * @param $time string
+ *
+ * @return string time
+ */
+function get_time_ago($time) {
+  
+  $time_difference = time() - strtotime($time);
+  
+  $condition = array(
+    60 * 60 => 'час',
+    60      => 'минута',
+    1       => 'секунда'
+  );
+  
+  if ($time_difference < 1) {
+    return 'меньше чем 1 секунду назад';
+  }
+  
+  foreach ($condition as $secs => $str) {
+    $time_unit = $time_difference / $secs;
+    
+    if ($time_unit >= 1) {
+      $new_time = round($time_unit);
+      
+      if ($str === 'секунда') {
+        $str = get_noun_plural_form($new_time, 'секунда', 'секунды', 'секунд');
+      }
+      if ($str === 'минута') {
+        $str = get_noun_plural_form($new_time, 'минута', 'минуты', 'минут');
+      }
+      if ($str === 'час') {
+        $str = get_noun_plural_form($new_time, 'час', 'часа', 'часов');
+      }
+      
+      if ($time_difference > 60*60*24 ){
+        return date_format(date_create($time), "d/m/y в H:i");
+      }
+      
+      return $new_time . ' ' . $str  . ' назад';
+    }
+  }
+}
+
+
+/**
+ * This function returns array of last_bet for specific user by user's id
+ *
+ * @param $user_id int
+ *
+ * @return array of last_bet
+ */
+function get_user_bets($user_id): array {
+  $sql = "SELECT rates.id AS rate_id,
+           date_format(rates.dt_add, '%d.%m.%y') AS data_rate,
+           rate AS rate,
+           lots.id as lot_id,
+           lots.title AS lot_title,
+           categories.title AS category_title,
+           lots.img_src AS lot_img,
+           lots.end_date as lot_end_date,
+           lots.winner_id as winner_id,
+           users.contact as author_contact
+          FROM rates
+          JOIN lots ON lots.id = rates.lot_id
+          JOIN users ON users.id = lots.author_id
+          JOIN categories ON categories.id = lots.category_id
+          WHERE rates.user_id = ?
+          ORDER BY rates.dt_add desc";
+  
+  $bets = db_fetch_data($sql, [$user_id]);
+  return $bets;
+}
+
+/**
+ * This function returns array of lots without winners and date of ending
+ * less or equals today.
+ *
+ * This needs for further adding lots_without_winners to that lots.
+ *
+ * @return array of lots without lots_without_winners
+ */
+function get_lots_without_winners(): array {
+  $sql = "SELECT lots.id as lot_id ,
+            lots.title AS lot_title,
+            lots.end_date AS lot_end_date ,
+            rates.rate AS win_rate ,
+            rates.user_id AS win_user_id
+          FROM lots
+          JOIN rates
+          ON lots.id = rates.lot_id
+          WHERE winner_id IS NULL AND lots.end_date <= CURDATE()
+          and rates.dt_add in (SELECT MAX(rates.dt_add) from rates GROUP BY lot_id)
+          ORDER BY lots.end_date
+          LIMIT 50;";
+  
+  $winners = db_fetch_data($sql);
+  return $winners;
+}
