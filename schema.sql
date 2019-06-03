@@ -45,6 +45,7 @@ create table rates (
   rate INT not null,
   user_id INT not null ,
   lot_id INT not null,
+  UNIQUE (lot_id, rate),
   FOREIGN KEY fk_user (user_id) REFERENCES users(id),
   FOREIGN KEY fk_lot (lot_id) REFERENCES lots(id)
 ) ;

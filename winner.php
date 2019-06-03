@@ -1,30 +1,33 @@
 <?php
 require_once 'init.php';
 
-$link = DbConnectionProvider::getConnection();
-
-$lots_without_winners = get_lots_without_winners();
-
-$sql_lots_without_winners = "SELECT lots.id as lot_id ,
-                 lots.title AS lot_title,
-                 lots.end_date AS lot_end_date,
-                 rates.rate AS win_rate,
-                 rates.user_id AS win_user_id
+//get rates where lots without winners and end_date in the past or equals today
+$sql_rates = "SELECT rates.lot_id, rates.rate, rates.user_id
+              FROM rates
+              WHERE rates.lot_id in (
+                SELECT lots.id
                 FROM lots
-                JOIN rates
-                ON lots.id = rates.lot_id
                 WHERE winner_id IS NULL AND lots.end_date <= CURDATE()
-                and rates.dt_add in (SELECT MAX(rates.dt_add) from rates GROUP BY lot_id);";
+              )";
 
-$sql_update_winners = "UPDATE lots SET winner_id = ? WHERE lots.id = ?;";
+$rates = db_fetch_data($sql_rates);
 
-foreach ($lots_without_winners as $key => $val) {
-  
-  $query_win = mysqli_query($link, $sql_lots_without_winners);
-  
-  $data = [$val['win_user_id'], $val['lot_id']];
-  
-  $stmt = db_get_prepare_stmt($link, $sql_update_winners, $data);
-  $result = mysqli_stmt_execute($stmt);
- }
+$maxRates = [];
 
+//find out max rates
+foreach ($rates as $rate) {
+  if (!isset($maxRates[$rate['lot_id']])) {
+    $maxRates[$rate['lot_id']] = $rate;
+    continue;
+  }
+  
+  if ($rate['rate'] > $maxRates[$rate['lot_id']]['rate']) {
+    $maxRates[$rate['lot_id']] = $rate;
+  }
+}
+
+$sql_update = "UPDATE lots SET winner_id = ? WHERE lots.id = ?;";
+
+foreach ($maxRates as $mRate) {
+  db_update_data($sql_update, [$mRate['user_id'], $mRate['lot_id'] ]);
+}

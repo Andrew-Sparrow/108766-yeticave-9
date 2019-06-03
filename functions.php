@@ -167,6 +167,25 @@ function db_insert_data($sql, $data = []) {
 }
 
 /**
+ * This function update data
+ *
+ * @param $link mysqli an object which represents the connection to a MySQL Server.
+ * @param $sql string This parameter can include one or more
+ *        parameter markers in the SQL statement by embedding
+ *        question mark (?) characters at the appropriate positions.
+ * @param $data an array of prepared variables for bindig this variables
+ *        to a prepared statement
+ * @return returns TRUE on success or FALSE on failure
+ */
+function db_update_data($sql, $data = []) {
+  $link = DbConnectionProvider::getConnection();
+  $stmt = db_get_prepare_stmt($link, $sql, $data);
+  $result = mysqli_stmt_execute($stmt);
+  
+  return $result;
+}
+
+/**
  * This function returns array of categories
  *
  * @return array of categories
@@ -379,7 +398,7 @@ function get_user_bets($user_id): array {
 }
 
 /**
- * This function returns array of lots without lots_without_winners and date of ending
+ * This function returns array of lots without winners and date of ending
  * less or equals today.
  *
  * This needs for further adding lots_without_winners to that lots.
