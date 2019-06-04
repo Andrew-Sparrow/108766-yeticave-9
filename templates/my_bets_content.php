@@ -7,7 +7,8 @@
     <?php if(isset($user_bets)): ?>
       <?php foreach($user_bets as $bet): ?>
       <?php $author_contact = $bet['author_contact'] ?? '' ?>
-        <tr class="rates__item<?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' rates__item--win': ' rates__item--end'?>">
+        <tr class="rates__item <?= $_SESSION['user']['id'] === $bet['winner_id'] && strtotime($bet['lot_end_date'])<= strtotime('now') ? 'rates__item--win': ''?>
+                               <?= $_SESSION['user']['id'] != $bet['winner_id'] && strtotime($bet['lot_end_date'])<= strtotime('now') ? 'rates__item--end': ''?>">
           <td class="rates__info">
             <div class="rates__img">
               <img src="<?= $bet['lot_img'] ?>" width="54" height="40" alt="">
@@ -23,7 +24,7 @@
             <?= $bet['category_title'] ?? ''?>
           </td>
           <td class="rates__timer">
-            <div class="timer <?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' timer--win': 'timer--finishing'?>">
+            <div class="timer <?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' timer--win': ' timer--finishing'?>">
               <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date'] ?? ''?>
             </div>
           </td>

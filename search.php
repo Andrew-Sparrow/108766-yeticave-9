@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $result_search = db_fetch_data($sql, [$search_data]);
   }
 }
-var_dump($result_search);
 
 $content = include_template(
   "search_content.php",
