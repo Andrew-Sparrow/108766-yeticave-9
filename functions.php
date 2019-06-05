@@ -197,7 +197,7 @@ function get_categories(): array {
 }
 
 /**
- * This function returns array of lots
+ * This function returns array of lots without winners
  *
  * @return array of lots
  */
