@@ -3,13 +3,16 @@
 require_once('init.php');
 
 $page_title = 'Поиск';
+
 $result_search_amount = 0;
 $result_set = [];
 $page_range = '';
 $pages_number = '';
 $cur_page = '';
+$items_on_page = 0;
 
-var_dump($_GET);
+$cur_page = $_GET['page'] ?? 1;
+$items_on_page = 3;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   
@@ -21,20 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             FROM lots
             JOIN categories ON categories.id = lots.category_id
             WHERE MATCH(lots.title, lots.description) AGAINST(? IN BOOLEAN MODE)
-            AND lots.end_date > CURDATE()";
+            AND lots.end_date > CURDATE()
+            LIMIT 100 ";
     
-    $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'];
+    $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'] ?? 0 ;
   }
   
-  var_dump($result_search_amount);
-  
-  $cur_page = $_GET['page'] ?? 1;
-  
-  $items_on_page = 9;
-  
-  $items_count = count($result_search_amount);
-  
-  $pages_number = ceil($items_count / $items_on_page);
+  $pages_number = ceil($result_search_amount / $items_on_page);
   
   $offset = ($cur_page - 1) * $items_on_page;
   
@@ -59,11 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 $content = include_template(
   "search_content.php",
   [
-    "result_set"   => $result_set,
-    "page_range"   => $page_range,
+    "result_set"           => $result_set,
+    "page_range"           => $page_range,
     "result_search_amount" => $result_search_amount,
-    "pages_number" => $pages_number,
-    "cur_page"     => $cur_page
+    "pages_number"         => $pages_number,
+    "cur_page"             => $cur_page,
+    "items_on_page"        => $items_on_page
   ]
 );
 

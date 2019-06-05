@@ -6,7 +6,7 @@ require_once ('helpers.php');
 <div class="container">
   <section class="lots">
     <h2>Результаты поиска по запросу «<span><?= !empty($_GET['search']) ? strip_tags($_GET['search']) : ''?></span>»</h2>
-    <?php if(empty($result_search_amount) && $_GET['search']): ?>
+    <?php if(empty($result_search_amount)): ?>
       <h3>Ничего не найдено по вашему запросу</h3>
     <?php else: ?>
       <ul class="lots__list">
@@ -28,10 +28,13 @@ require_once ('helpers.php');
                   <?= get_current_price($val['id']) === $val['start_price'] ? 'Стартовая цена' : count(get_bets($val['id'])).' '
                     . get_noun_plural_form(count(get_bets($val['id'])), 'ставка', 'ставки', 'ставок')?>
                 </span>
-                  <span class="lot__cost"><?= !empty(get_bets($val['id'])) ? format_number(get_bets($val['id'])[0]['rate']): '' ?><b class="rub">р</b></span>
+                  <span class="lot__cost">
+                    <?= empty(get_bets($val['id']))?
+                      format_number($val['start_price']). '<b class="rub">р</b>':
+                      format_number(get_current_price($val['id'])). '<b class="rub">р</b>' ?>
+                  </span>
                 </div>
-                <div class="lot__timer timer">
-                  <!-- TODO добавить timer--finishing               -->
+                <div class="lot__timer timer <?= strtotime($val['end_date']) === strtotime('tomorrow')? 'timer--finishing': ''?>">
                   <?= $val['end_date']?>
                 </div>
               </div>
@@ -39,24 +42,17 @@ require_once ('helpers.php');
           </li>
         <?php endforeach;?>
       </ul>
-     <?php endif;?>
+    <?php endif;?>
   </section>
-  <?php if($result_search_amount > 9): ?>
-  <ul class="pagination-list">
-    <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-    <li class="pagination-item pagination-item-active"><a>1</a></li>
-    <li class="pagination-item"><a href="#">2</a></li>
-    <li class="pagination-item"><a href="#">3</a></li>
-    <li class="pagination-item"><a href="#">4</a></li>
-    <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
-  </ul>
-      <ul class="pagination-list">
-        <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-        <?php foreach ($page_range as $page): ?>
-          <li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>">
-            <a href="/?page=<?=$page;?>"><?=$page;?></a>
-          </li>
-        <?php endforeach; ?>
-      </ul>
+  <?php if($result_search_amount > $items_on_page): ?>
+    <ul class="pagination-list">
+      <li class="pagination-item pagination-item-prev"><a href="#">Назад</a></li>
+      <?php foreach ($page_range as $page): ?>
+        <li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>">
+          <a href="/search.php?page=<?=$page;?>&&search=<?=$_GET['search']?>"><?=$page;?></a>
+        </li>
+      <?php endforeach; ?>
+      <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
+    </ul>
   <?php endif; ?>
 </div>

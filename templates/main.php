@@ -53,7 +53,7 @@ require_once("functions.php");
               <?php endif; ?>
             </div>
             <div class="lot__timer timer
-              <?php echo validate_less_hour(strtotime("tomorrow")) ? "timer--finishing" : "" ?> ">
+              <?= validate_less_hour(strtotime("tomorrow")) ? "timer--finishing" : "" ?> ">
               <?= get_formatted_time(strtotime("tomorrow"))?>
             </div>
           </div>
