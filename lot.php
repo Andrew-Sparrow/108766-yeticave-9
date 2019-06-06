@@ -54,7 +54,7 @@ if (is_null($lot)) {
   exit();
 }
 
-if (isset($_SESSION['user']['id'])) {
+if (isset($_SESSION['user']['id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
   
   $new_bet = $_POST['cost'] ?? null;
   
@@ -85,7 +85,7 @@ if (isset($_SESSION['user']['id'])) {
     $is_user_last_bet_other = $_SESSION['user']['id'] != $last_bet['user_id'];
   }
   
-  if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (empty($errors) ) {
     $new_bet = intval(trim($new_bet));
     
     $sql = "INSERT INTO rates (rate, user_id, lot_id)
