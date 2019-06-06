@@ -16,8 +16,6 @@ if (isset($_SESSION['user']['id'])) {
   
   $user_bets = get_user_bets($user_id);
 }
-var_dump($user_bets);
-var_dump($user_bets[0]['lot_end_date']<= strtotime('now'));
 
 $content = include_template(
   "my_bets_content.php",

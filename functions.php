@@ -202,10 +202,11 @@ function get_categories(): array {
  * @return array of lots
  */
 function get_lots(): array {
-  $sql = 'SELECT lots.id as lot_id,
-           lots.title as lot_title,
+  $sql = 'SELECT lots.id as id,
+           lots.title as title,
            start_price ,
-           img_src
+           img_src as lot_img,
+           end_date
           FROM lots
           WHERE winner_id IS NULL AND lots.end_date > CURDATE()';
   $lots = db_fetch_data($sql);
@@ -294,7 +295,7 @@ function get_bets($lot_id): array {
           ORDER BY rates.dt_add desc
           LIMIT 10";
   $bets = db_fetch_data($sql, [$lot_id]);
-  return $bets;
+  return $bets ?? [];
 }
 
 
@@ -315,7 +316,7 @@ function get_last_bet($lot_id): array {
           ORDER BY rates.dt_add desc
           LIMIT 1";
   $bets = db_fetch_data($sql, [$lot_id]);
-  return $bets;
+  return $bets[0] ?? [] ;
 }
 
 
@@ -359,7 +360,7 @@ function get_time_ago($time) {
       }
       
       if ($time_difference > 60*60*24 ){
-        return date_format(date_create($time), "d/m/y в H:i");
+        return date_format(date_create($time), "d.m.y в H:i");
       }
       
       return $new_time . ' ' . $str  . ' назад';

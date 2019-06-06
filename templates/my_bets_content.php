@@ -8,7 +8,7 @@
       <?php foreach($user_bets as $bet): ?>
       <?php $author_contact = $bet['author_contact'] ?? '' ?>
         <tr class="rates__item <?= $_SESSION['user']['id'] === $bet['winner_id'] && strtotime($bet['lot_end_date'])<= strtotime('now') ? 'rates__item--win': ''?>
-                               <?= $_SESSION['user']['id'] != $bet['winner_id'] && strtotime($bet['lot_end_date'])<= strtotime('now') ? 'rates__item--end': ''?>">
+                               <?= $_SESSION['user']['id'] != $bet['winner_id'] && strtotime($bet['lot_end_date'])<= time() ? 'rates__item--end': ''?>">
           <td class="rates__info">
             <div class="rates__img">
               <img src="<?= $bet['lot_img'] ?>" width="54" height="40" alt="">

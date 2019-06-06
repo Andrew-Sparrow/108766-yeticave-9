@@ -41,12 +41,11 @@ $errors = [];
 
 $is_lot_author_other_user = false;
 
-$is_user_last_bet_other = false ;
-
 $bets = get_bets($lot_id);
 
 $last_bet = get_last_bet($lot_id);
 
+$is_user_last_bet_other = true ;
 
 //вывод страницы 404, если нет lot'а с таким id
 if (is_null($lot)) {
@@ -55,51 +54,54 @@ if (is_null($lot)) {
   exit();
 }
 
-if ($is_user_auth) {
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    $new_bet = $_POST['cost'] ?? null;
-    
-    //if $new_bet equals zero it will be empty($new_bet) == true
-    if (empty($new_bet)) {
-      $errors['cost'] = 'Это поле надо заполнить';
-    }
-    elseif (!is_numeric($new_bet)) {
-      $errors['cost'] = 'Введите число';
-    }
-    elseif ($new_bet < 0) {
-      $errors['cost'] = 'Введите число больше нуля';
-    }
-    elseif ($new_bet < $min_rate) {
-      $errors['cost'] = 'Значение должно быть больше либо равно минимальной ставке';
-    }
-    elseif (!ctype_digit($new_bet)) {
-      $errors['cost'] = 'Введите целое число';
-    }
-    
-    if (empty($errors)) {
-      $new_bet = intval(trim($new_bet));
-      
-      $sql = "INSERT INTO rates (rate, user_id, lot_id)
-        VALUES ( ?, ?, ?)";
-      
-      $user_id = $_SESSION['user']['id'];
+if (isset($_SESSION['user']['id'])) {
   
-      $is_lot_author_other_user = $_SESSION['user']['id'] != $lot['author_id'];
+  $new_bet = $_POST['cost'] ?? null;
   
-      //for showing or not block of entering new bet
-      //verify if last bet made by other user than this one
-      $is_user_last_bet_other = $_SESSION['user']['id'] != $last_bet['user_id'];
-      
-      $bet = db_insert_data(
-        $sql,
-        [
-          $new_bet,
-          $user_id,
-          $lot_id
-        ]
-      );
-    }
+  //if $new_bet equals zero it will be empty($new_bet) == true
+  if (empty($new_bet)) {
+    $errors['cost'] = 'Это поле надо заполнить';
+  }
+  elseif (!is_numeric($new_bet)) {
+    $errors['cost'] = 'Введите число';
+  }
+  elseif ($new_bet < 0) {
+    $errors['cost'] = 'Введите число больше нуля';
+  }
+  elseif ($new_bet < $min_rate) {
+    $errors['cost'] = 'Значение должно быть больше либо равно минимальной ставке';
+  }
+  elseif (!ctype_digit($new_bet)) {
+    $errors['cost'] = 'Введите целое число';
+  }
+  
+  $user_id = $_SESSION['user']['id'];
+  
+  $is_lot_author_other_user = $_SESSION['user']['id'] !== $lot['author_id'];
+  
+  //for showing or not block of entering new bet
+  //verify if last bet made by other user than this one
+  if(isset($last_bet['user_id'])) {
+    $is_user_last_bet_other = $_SESSION['user']['id'] != $last_bet['user_id'];
+  }
+  
+  if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $new_bet = intval(trim($new_bet));
+    
+    $sql = "INSERT INTO rates (rate, user_id, lot_id)
+      VALUES ( ?, ?, ?)";
+    
+    $bet = db_insert_data(
+      $sql,
+      [
+        $new_bet,
+        $user_id,
+        $lot_id
+      ]
+    );
+    
+    //clean $new_bet's value to prevent sending new bet after reload of page
+    $new_bet = null;
   }
 }
 
@@ -107,6 +109,9 @@ if ($is_user_auth) {
 $is_end_date_in_future = date_create($lot['end_date']) > new DateTime("now");
 
 $page_title = strip_tags($lot['title']);
+
+var_dump($last_bet);
+var_dump($is_user_last_bet_other);
 
 $content = include_template(
   "lot_content.php",
