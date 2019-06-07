@@ -161,7 +161,9 @@ if (isset($_SESSION['user']['id'])) {
     [
       'page_title' => $page_title,
       'content'    => $content,
-      'categories' => $categories
+      'categories' => $categories,
+      'is_auth'    => $is_auth,
+      'user_name'  => $user_name
     ]
   );
   

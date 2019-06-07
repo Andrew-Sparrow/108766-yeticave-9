@@ -1,6 +1,3 @@
-<?php
-?>
-
 <form class="form container <?= isset($errors) ? "form--invalid" : "" ?>" action="enter.php" method="post">
   <!-- form--invalid -->
   <h2>Вход</h2>

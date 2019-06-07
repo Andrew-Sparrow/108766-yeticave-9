@@ -1,4 +1,5 @@
 <?php
+require_once ('vendor/autoload.php');
 
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
@@ -18,5 +19,5 @@ set_timezone("Asia/Yekaterinburg");
 
 $categories = get_categories();
 
-$is_user_auth = isset($_SESSION['user']['id']) ? true : false ;
-
+$is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
+$user_name = $_SESSION['user']['name'] ?? '';

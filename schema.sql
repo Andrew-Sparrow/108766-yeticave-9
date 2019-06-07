@@ -49,3 +49,5 @@ create table rates (
   FOREIGN KEY fk_user (user_id) REFERENCES users(id),
   FOREIGN KEY fk_lot (lot_id) REFERENCES lots(id)
 ) ;
+
+CREATE FULLTEXT INDEX lots_search ON lots(title, description);

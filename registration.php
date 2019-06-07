@@ -7,7 +7,6 @@ $fetch_data = false;
 $page_title = 'Регистрация';
 $user_name = null;
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   $registration = [
@@ -83,6 +82,7 @@ $layout = include_template(
     'page_title' => $page_title,
     'content'    => $content,
     'categories' => $categories,
+    'is_auth'    => $is_auth,
     'user_name'  => $user_name
   ]
 );

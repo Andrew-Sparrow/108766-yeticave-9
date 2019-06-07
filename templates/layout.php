@@ -1,8 +1,3 @@
-<?php
-$is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
-$user_name = $_SESSION['user']['name'] ?? '';
-?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -22,7 +17,7 @@ $user_name = $_SESSION['user']['name'] ?? '';
       </a>
       <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
         <input type="search" name="search" placeholder="Поиск лота">
-        <input class="main-header__search-btn" type="submit" name="find" value="">
+        <input class="main-header__search-btn" type="submit">
       </form>
       <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
       

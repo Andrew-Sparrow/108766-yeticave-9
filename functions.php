@@ -197,15 +197,16 @@ function get_categories(): array {
 }
 
 /**
- * This function returns array of lots
+ * This function returns array of lots without winners
  *
  * @return array of lots
  */
 function get_lots(): array {
-  $sql = 'SELECT lots.id as lot_id,
-           lots.title as lot_title,
+  $sql = 'SELECT lots.id as id,
+           lots.title as title,
            start_price ,
-           img_src
+           img_src as lot_img,
+           end_date
           FROM lots
           WHERE winner_id IS NULL AND lots.end_date > CURDATE()';
   $lots = db_fetch_data($sql);
@@ -294,7 +295,7 @@ function get_bets($lot_id): array {
           ORDER BY rates.dt_add desc
           LIMIT 10";
   $bets = db_fetch_data($sql, [$lot_id]);
-  return $bets;
+  return $bets ?? [];
 }
 
 
@@ -315,7 +316,7 @@ function get_last_bet($lot_id): array {
           ORDER BY rates.dt_add desc
           LIMIT 1";
   $bets = db_fetch_data($sql, [$lot_id]);
-  return $bets;
+  return $bets[0] ?? [] ;
 }
 
 
@@ -359,14 +360,13 @@ function get_time_ago($time) {
       }
       
       if ($time_difference > 60*60*24 ){
-        return date_format(date_create($time), "d/m/y в H:i");
+        return date_format(date_create($time), "d.m.y в H:i");
       }
       
       return $new_time . ' ' . $str  . ' назад';
     }
   }
 }
-
 
 /**
  * This function returns array of last_bet for specific user by user's id
@@ -391,34 +391,18 @@ function get_user_bets($user_id): array {
           JOIN users ON users.id = lots.author_id
           JOIN categories ON categories.id = lots.category_id
           WHERE rates.user_id = ?
-          ORDER BY rates.dt_add desc";
+          ORDER BY lots.end_date desc";
   
   $bets = db_fetch_data($sql, [$user_id]);
   return $bets;
 }
 
 /**
- * This function returns array of lots without winners and date of ending
- * less or equals today.
+ * This function returns default img source
  *
- * This needs for further adding lots_without_winners to that lots.
- *
- * @return array of lots without lots_without_winners
+ * @return string img source
  */
-function get_lots_without_winners(): array {
-  $sql = "SELECT lots.id as lot_id ,
-            lots.title AS lot_title,
-            lots.end_date AS lot_end_date ,
-            rates.rate AS win_rate ,
-            rates.user_id AS win_user_id
-          FROM lots
-          JOIN rates
-          ON lots.id = rates.lot_id
-          WHERE winner_id IS NULL AND lots.end_date <= CURDATE()
-          and rates.dt_add in (SELECT MAX(rates.dt_add) from rates GROUP BY lot_id)
-          ORDER BY lots.end_date
-          LIMIT 50;";
-  
-  $winners = db_fetch_data($sql);
-  return $winners;
+function get_default_image_src() {
+  return 'img/lot-1.jpg';
 }
+
