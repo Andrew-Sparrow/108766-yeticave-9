@@ -22,8 +22,6 @@
       <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
       
       <nav class="user-menu">
-        
-        <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
         <?php if($is_auth === 1): ?>
           <div class="user-menu__logged">
             <p><?= strip_tags($user_name) ?></p>
@@ -47,16 +45,17 @@
   <main class="container">
     <?= $main_content; ?>
   </main>
+  
 </div>
 
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
       <!--заполните этот список из массива категорий-->
-      <?php foreach($categories as $var): ?>
+      <?php foreach($categories as $category): ?>
         <li class="nav__item">
-          <a href="pages/all-lots.html">
-            <?= strip_tags($var['title']) ?>
+          <a href="/get_lots_by_category.php?category_id=<?= isset($category['id'])? $category['id'] : '' ?>" >
+            <?= strip_tags($category['title']); ?>
           </a>
         </li>
       <?php endforeach; ?>

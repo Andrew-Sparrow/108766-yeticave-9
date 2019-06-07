@@ -36,7 +36,7 @@
         </div>
         <div class="lot-item__cost-state">
           <div class="lot-item__rate">
-            <span class="lot-item__amount">Текущая цена</span>
+            <span class="lot-item__amount"><?= get_current_price($lot['id']) === $lot['start_price'] ? 'Стартовая цена' :'Текущая цена'?></span>
             <?php if(isset($lot['id'])): ?>
               <span class="lot-item__cost">
                 <?= format_number_ruble(intval($current_price));?>

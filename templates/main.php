@@ -6,7 +6,7 @@
     <!--заполните этот список из массива категорий-->
     <?php foreach($categories as $category): ?>
       <li class="promo__item promo__item--<?= strip_tags($category['symbol_code'])?>">
-        <a class="promo__link" href="pages/all-lots.html">
+        <a class="promo__link" href="/get_lots_by_category.php?category_id=<?= isset($category['id'])? $category['id'] : '' ?>" >
           <?= strip_tags($category['title']); ?>
         </a>
       </li>
@@ -20,7 +20,7 @@
   <ul class="lots__list">
     <!--заполните этот список из массива с товарами-->
     <?php foreach($lots as $lot): ?>
-      <?= include_template("lot_cards.php", ["lot" => $lot]) ?>
+      <?= include_template("lot_card.php", ["lot" => $lot]) ?>
     <?php endforeach; ?>
   </ul>
 </section>

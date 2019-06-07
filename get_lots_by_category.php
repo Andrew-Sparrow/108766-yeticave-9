@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-$page_title = 'Поиск';
+$page_title = 'Лоты по категориям';
 
 $result_search_amount = 0;
 $result_set = [];
@@ -13,17 +13,12 @@ $items_on_page = 0;
 $cur_page = $_GET['page'] ?? 1;
 $items_on_page = 9;
 
-$search_data = isset($_GET['search']) ? trim($_GET['search']) : '';
-
-if ($search_data !== '') {
-  
   $sql = "SELECT COUNT(*) AS cnt
           FROM lots
-          WHERE lots.category_id
+          WHERE lots.category_id = ". $_GET['category_id'] ."
           AND lots.end_date > CURDATE()";
   
-  $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'] ?? 0;
-}
+  $result_search_amount = db_fetch_data($sql)[0]['cnt'] ?? 0;
 
 $pages_number = ceil($result_search_amount / $items_on_page);
 
@@ -39,15 +34,15 @@ $sql_set_of_lots = 'SELECT lots.id ,
           end_date as end_date
           FROM lots
           JOIN categories ON categories.id = lots.category_id
-          WHERE MATCH(lots.title, lots.description) AGAINST(? IN BOOLEAN MODE)
+          WHERE lots.category_id = '. $_GET['category_id']. '
           AND lots.end_date > CURDATE()
           ORDER BY lots.dt_add DESC
           LIMIT ' . $items_on_page . ' OFFSET ' . $offset;
 
-$result_set_of_lots = db_fetch_data($sql_set_of_lots, [$search_data]);
+$result_set_of_lots = db_fetch_data($sql_set_of_lots);
 
 $content = include_template(
-  "search_content.php",
+  "lots_by_category_content.php",
   [
     "result_set_of_lots"   => $result_set_of_lots,
     "page_range"           => $page_range,

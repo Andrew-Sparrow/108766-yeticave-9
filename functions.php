@@ -405,6 +405,6 @@ function get_user_bets($user_id): array {
  * @return string img source
  */
 function get_default_image_src() {
-  return 'img/lot-1.jpg';
+  return 'img/no_photo.jpg';
 }
 
