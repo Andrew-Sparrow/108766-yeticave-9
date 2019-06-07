@@ -56,54 +56,54 @@ if (is_null($lot)) {
   exit();
 }
 
-if (isset($_SESSION['user']['id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  
-  $new_bet = $_POST['cost'] ?? null;
-  
-  //if $new_bet equals zero it will be empty($new_bet) == true
-  if (empty($new_bet)) {
-    $errors['cost'] = 'Это поле надо заполнить';
-  }
-  elseif (!is_numeric($new_bet)) {
-    $errors['cost'] = 'Введите число';
-  }
-  elseif ($new_bet < 0) {
-    $errors['cost'] = 'Введите число больше нуля';
-  }
-  elseif ($new_bet < $min_rate) {
-    $errors['cost'] = 'Значение должно быть больше либо равно минимальной ставке';
-  }
-  elseif (!ctype_digit($new_bet)) {
-    $errors['cost'] = 'Введите целое число';
-  }
+if (isset($_SESSION['user']['id'])) {
   
   $user_id = $_SESSION['user']['id'];
   
-  $is_lot_author_other_user = $_SESSION['user']['id'] !== $lot['author_id'];
+  $is_lot_author_other_user = $user_id !== $lot['author_id'];
+  
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+  
+    $new_bet = $_POST['cost'] ?? null;
+  
+    //if $new_bet equals zero it will be empty($new_bet) == true
+    if (empty($new_bet)) {
+      $errors['cost'] = 'Это поле надо заполнить';
+    }
+    elseif (!is_numeric($new_bet)) {
+      $errors['cost'] = 'Введите число';
+    }
+    elseif ($new_bet < 0) {
+      $errors['cost'] = 'Введите число больше нуля';
+    }
+    elseif ($new_bet < $min_rate) {
+      $errors['cost'] = 'Значение должно быть больше либо равно минимальной ставке';
+    }
+    elseif (!ctype_digit($new_bet)) {
+      $errors['cost'] = 'Введите целое число';
+    }
+  
+    if (empty($errors)) {
+      $new_bet = intval(trim($new_bet));
+    
+      $sql = "INSERT INTO rates (rate, user_id, lot_id)
+      VALUES ( ?, ?, ?)";
+    
+      $bet = db_insert_data(
+        $sql,
+        [
+          $new_bet,
+          $user_id,
+          $lot_id
+        ]
+      );
+    }
+  }
   
   //for showing or not block of entering new bet
   //verify if last bet made by other user than this one
   if (isset($last_bet['user_id'])) {
-    $is_user_last_bet_other = $_SESSION['user']['id'] != $last_bet['user_id'];
-  }
-  
-  if (empty($errors)) {
-    $new_bet = intval(trim($new_bet));
-    
-    $sql = "INSERT INTO rates (rate, user_id, lot_id)
-      VALUES ( ?, ?, ?)";
-    
-    $bet = db_insert_data(
-      $sql,
-      [
-        $new_bet,
-        $user_id,
-        $lot_id
-      ]
-    );
-    
-    //clean $new_bet's value to prevent sending new bet after reload of page
-    $new_bet = null;
+    $is_user_last_bet_other = $user_id != $last_bet['user_id'];
   }
 }
 

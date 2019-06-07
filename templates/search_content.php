@@ -7,7 +7,7 @@
     <?php else: ?>
       <ul class="lots__list">
         <?php foreach ($result_set_of_lots as $lot): ?>
-          <?= include_template("lot_cards.php", ["lot" => $lot]) ?>
+          <?= include_template("lot_card.php", ["lot" => $lot]) ?>
         <?php endforeach; ?>
       </ul>
     <?php endif; ?>
