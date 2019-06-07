@@ -62,7 +62,9 @@ $layout = include_template(
   [
     'page_title' => $page_title,
     'content'    => $enter_content,
-    'categories' => $categories
+    'categories' => $categories,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name
   ]
 );
 

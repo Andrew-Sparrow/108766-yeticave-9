@@ -1,8 +1,5 @@
 use yetiDB;
 
-#добавление индекса для полнотекстового поиска
-CREATE FULLTEXT INDEX lot_ft_search ON lots(title, description);
-
 # вставка категорий
 insert into categories (title, symbol_code)
 values ('Доски и лыжи', 'boards'),

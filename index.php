@@ -1,12 +1,9 @@
 <?php
 require_once("init.php");
-require_once ("winner.php");
+require_once("winner.php");
+require_once("getwinner.php");
 
 $title = "Главная";
-
-if (isset($_SESSION['user']['name'])) {
-  $user_name = $_SESSION['user']['name'];
-}
 
 $categories = get_categories();
 $lots = get_lots();
@@ -24,7 +21,9 @@ $layout = include_template(
   [
     "title"        => $title,
     "main_content" => $main_content,
-    "categories"   => $categories
+    "categories"   => $categories,
+    'is_auth'      => $is_auth,
+    'user_name'    => $user_name
   ]
 );
 

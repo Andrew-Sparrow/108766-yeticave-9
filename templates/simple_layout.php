@@ -1,8 +1,3 @@
-<?php
-$is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
-$user_name = $_SESSION['user']['name'] ?? '';
-?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -27,7 +22,7 @@ $user_name = $_SESSION['user']['name'] ?? '';
       </a>
       <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
         <input type="search" name="search" placeholder="Поиск лота" value="<?= $_GET['search'] ?? ''?>">
-        <input class="main-header__search-btn" type="submit" name="find" value="Найти">
+        <input class="main-header__search-btn" type="submit">
       </form>
       <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
       <nav class="user-menu">
@@ -56,10 +51,10 @@ $user_name = $_SESSION['user']['name'] ?? '';
   <main>
     <nav class="nav">
       <ul class="nav__list container">
-        <?php foreach($categories as $var): ?>
+        <?php foreach($categories as $category): ?>
           <li class="nav__item">
             <a href="pages/all-lots.html">
-              <?= strip_tags($var['title']); ?>
+              <?= strip_tags($category['title']); ?>
             </a>
           </li>
         <?php endforeach; ?>
@@ -74,10 +69,10 @@ $user_name = $_SESSION['user']['name'] ?? '';
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
-      <?php foreach($categories as $var): ?>
+      <?php foreach($categories as $category): ?>
         <li class="nav__item">
           <a href="pages/all-lots.html">
-            <?= strip_tags($var['title']); ?>
+            <?= strip_tags($category['title']); ?>
           </a>
         </li>
       <?php endforeach; ?>
