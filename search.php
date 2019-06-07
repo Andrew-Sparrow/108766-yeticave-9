@@ -1,5 +1,4 @@
 <?php
-
 require_once('init.php');
 
 $page_title = 'Поиск';
@@ -14,7 +13,6 @@ $items_on_page = 0;
 $cur_page = $_GET['page'] ?? 1;
 $items_on_page = 9;
 
-
 $search_data = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 if ($search_data !== '') {
@@ -24,7 +22,7 @@ if ($search_data !== '') {
           WHERE MATCH(lots.title, lots.description) AGAINST(? IN BOOLEAN MODE)
           AND lots.end_date > CURDATE()";
   
-  $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'] ?? 0 ;
+  $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'] ?? 0;
 }
 
 $pages_number = ceil($result_search_amount / $items_on_page);
@@ -46,12 +44,12 @@ $sql_set_of_lots = 'SELECT lots.id ,
           ORDER BY lots.dt_add DESC
           LIMIT ' . $items_on_page . ' OFFSET ' . $offset;
 
-$result_set = db_fetch_data($sql_set_of_lots, [$search_data]);
+$result_set_of_lots = db_fetch_data($sql_set_of_lots, [$search_data]);
 
 $content = include_template(
   "search_content.php",
   [
-    "result_set"           => $result_set,
+    "result_set_of_lots"   => $result_set_of_lots,
     "page_range"           => $page_range,
     "result_search_amount" => $result_search_amount,
     "cur_page"             => $cur_page,
@@ -64,7 +62,9 @@ $layout = include_template(
   [
     'page_title' => $page_title,
     'content'    => $content,
-    'categories' => $categories
+    'categories' => $categories,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name
   ]
 );
 

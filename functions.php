@@ -397,3 +397,12 @@ function get_user_bets($user_id): array {
   return $bets;
 }
 
+/**
+ * This function returns default img source
+ *
+ * @return string img source
+ */
+function get_default_image_src() {
+  return 'img/lot-1.jpg';
+}
+

@@ -1,8 +1,3 @@
-<?php
-$is_auth = isset($_SESSION['user']['name']) ?  1 : 0;
-$user_name = $_SESSION['user']['name'] ?? '';
-?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -56,10 +51,10 @@ $user_name = $_SESSION['user']['name'] ?? '';
   <main>
     <nav class="nav">
       <ul class="nav__list container">
-        <?php foreach($categories as $var): ?>
+        <?php foreach($categories as $category): ?>
           <li class="nav__item">
             <a href="pages/all-lots.html">
-              <?= strip_tags($var['title']); ?>
+              <?= strip_tags($category['title']); ?>
             </a>
           </li>
         <?php endforeach; ?>
@@ -74,10 +69,10 @@ $user_name = $_SESSION['user']['name'] ?? '';
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
-      <?php foreach($categories as $var): ?>
+      <?php foreach($categories as $category): ?>
         <li class="nav__item">
           <a href="pages/all-lots.html">
-            <?= strip_tags($var['title']); ?>
+            <?= strip_tags($category['title']); ?>
           </a>
         </li>
       <?php endforeach; ?>

@@ -12,6 +12,8 @@ $templete_404 = include_template(
     'page_title' => $page_title,
     'content'    => $content,
     'categories' => $categories,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name
   ]
 );
 
@@ -45,7 +47,7 @@ $bets = get_bets($lot_id);
 
 $last_bet = get_last_bet($lot_id);
 
-$is_user_last_bet_other = true ;
+$is_user_last_bet_other = true;
 
 //вывод страницы 404, если нет lot'а с таким id
 if (is_null($lot)) {
@@ -81,11 +83,11 @@ if (isset($_SESSION['user']['id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
   
   //for showing or not block of entering new bet
   //verify if last bet made by other user than this one
-  if(isset($last_bet['user_id'])) {
+  if (isset($last_bet['user_id'])) {
     $is_user_last_bet_other = $_SESSION['user']['id'] != $last_bet['user_id'];
   }
   
-  if (empty($errors) ) {
+  if (empty($errors)) {
     $new_bet = intval(trim($new_bet));
     
     $sql = "INSERT INTO rates (rate, user_id, lot_id)
@@ -110,9 +112,6 @@ $is_end_date_in_future = date_create($lot['end_date']) > new DateTime("now");
 
 $page_title = strip_tags($lot['title']);
 
-var_dump($last_bet);
-var_dump($is_user_last_bet_other);
-
 $content = include_template(
   "lot_content.php",
   [
@@ -133,6 +132,8 @@ $layout = include_template(
     'page_title' => $page_title,
     'content'    => $content,
     'categories' => $categories,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name
   ]
 );
 
