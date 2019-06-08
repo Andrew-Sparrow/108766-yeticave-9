@@ -1,6 +1,6 @@
 <li class="lots__item lot">
   <div class="lot__image">
-    <img src="<?= isset($lot['lot_img']) ? strip_tags($lot['lot_img']) : get_default_image_src(); ?>" width="350" height="260" alt="<?= $lot['title']?>">
+    <img src="<?= isset($lot['lot_img']) && file_exists($lot['lot_img'])?  strip_tags($lot['lot_img']) : get_default_image_src();?>" width="350" height="260" alt="<?= $lot['title']?>">
   </div>
   <div class="lot__info">
     <span class="lot__category"><?= isset($lot['category'])? strip_tags($lot['category']) : ''?></span>

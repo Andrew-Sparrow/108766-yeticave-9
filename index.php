@@ -1,7 +1,6 @@
 <?php
 require_once("init.php");
-require_once("winner.php");
-require_once("getwinner.php");
+require_once("get_winners.php");
 
 $title = "Главная";
 
@@ -28,4 +27,3 @@ $layout = include_template(
 );
 
 print($layout);
-

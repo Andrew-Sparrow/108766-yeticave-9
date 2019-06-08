@@ -135,11 +135,13 @@ function db_fetch_data($sql, $data = []): array {
   $link = DbConnectionProvider::getConnection();
   $result = [];
   $stmt = db_get_prepare_stmt($link, $sql, $data);
-  mysqli_stmt_execute($stmt);
-  $res = mysqli_stmt_get_result($stmt);
   
-  if ($res) {
-    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+  mysqli_stmt_execute($stmt);
+  
+  $result_mysqli = mysqli_stmt_get_result($stmt);
+  
+  if ($result_mysqli) {
+    $result = mysqli_fetch_all($result_mysqli, MYSQLI_ASSOC);
   }
   return $result;
 }
@@ -403,6 +405,6 @@ function get_user_bets($user_id): array {
  * @return string img source
  */
 function get_default_image_src() {
-  return 'img/lot-1.jpg';
+  return 'img/no_photo.jpg';
 }
 
