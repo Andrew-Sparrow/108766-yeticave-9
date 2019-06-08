@@ -27,4 +27,3 @@ $layout = include_template(
 );
 
 print($layout);
-

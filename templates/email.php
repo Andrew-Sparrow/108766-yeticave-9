@@ -1,6 +1,11 @@
+<?php
+$link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
+    "https" : "http") . "://" . $_SERVER['SERVER_NAME'];
+?>
+
 <h1>Поздравляем с победой</h1>
 <p>Здравствуйте, <?=$winner_name?></p>
-<p>Ваша ставка для лота <a href="http://108766-yeticave-9/lot.php?id=<?=$lot_id?>"><?=$lot_title?></a> победила.</p>
-<p>Перейдите по ссылке <a href="http://108766-yeticave-9/my_bets.php">мои ставки</a>,
+<p>Ваша ставка для лота <a href="http://<?=$link?>/lot.php?id=<?=$lot_id?>"><?=$lot_title?></a> победила.</p>
+<p>Перейдите по ссылке <a href="http://<?=$link?>/my_bets.php">мои ставки</a>,
   чтобы связаться с автором объявления</p>
 <small>Интернет Аукцион "YetiCave"</small>

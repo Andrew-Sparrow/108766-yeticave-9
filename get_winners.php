@@ -4,7 +4,6 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 
 require_once 'init.php';
-require_once 'vendor/autoload.php';
 
 $transport = new Swift_SmtpTransport("phpdemo.ru", 25);
 $transport->setUsername("keks@phpdemo.ru");
@@ -55,7 +54,9 @@ $sql_update = "UPDATE lots SET winner_id = ? WHERE lots.id = ?;";
 
 //update data , set winners to lots
 foreach ($maxRates as $mRate) {
-  db_update_data($sql_update, [$mRate['user_id'], $mRate['lot_id'] ]);
+  if(isset($mRate['user_id'], $mRate['lot_id'])) {
+    db_update_data($sql_update, [$mRate['user_id'], $mRate['lot_id'] ]);
+  }
 }
 
 if (count($maxRates) > 0) {
@@ -65,26 +66,27 @@ if (count($maxRates) > 0) {
     $validator = new EmailValidator();
     
     //validate email
-    if ($validator->isValid($maxRate['user_email'], new RFCValidation())) {
+    if ($validator->isValid(strip_tags($maxRate['user_email']), new RFCValidation())) {
+      if (isset($maxRate['user_name'], $maxRate['lot_title'], $maxRate['lot_id'], $maxRate['user_email'])) {
+        $recipient = [];
   
-      $recipient = [];
+        $recipient[strip_tags($maxRate['user_email'])] = strip_tags($maxRate['user_name']);
   
-      $recipient[$maxRate['user_email']] = $maxRate['user_name'];
+        $message = new Swift_Message();
+        $message->setSubject("Ваша ставка победила");
+        $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
+        $message->setBcc($recipient);
   
-      $message = new Swift_Message();
-      $message->setSubject("Ваша ставка победила");
-      $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
-      $message->setBcc($recipient);
-      
-      $message_content = include_template('email.php', [
-        "winner_name" => $maxRate['user_name'],
-        "lot_title"   => $maxRate['lot_title'],
-        "lot_id"      => $maxRate['lot_id']
-      ]);
-      
-      $message->setBody($message_content, 'text/html');
-      
-      $result_of_message = $mailer->send($message);
+        $message_content = include_template('email.php', [
+          "winner_name" => strip_tags($maxRate['user_name']),
+          "lot_title"   => strip_tags($maxRate['lot_title']),
+          "lot_id"      => $maxRate['lot_id']
+        ]);
+  
+        $message->setBody($message_content, 'text/html');
+  
+        $result_of_message = $mailer->send($message);
+      }
     }
   }
 }
