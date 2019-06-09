@@ -20,9 +20,9 @@
     <label for="password">Пароль <sup>*</sup></label>
     <input id="password" type="password" name="password" placeholder="Введите пароль"
       <?= empty($errors['email'])? 'autofocus': '' ?>>
-    <? if (isset($errors['password'])): ?>
+    <?php if (isset($errors['password'])): ?>
       <span class="form__error"><?= $errors['password'] ?></span>
-    <? endif ?>
+    <?php endif ?>
   </div>
   <button type="submit" class="button">Войти</button>
 </form>

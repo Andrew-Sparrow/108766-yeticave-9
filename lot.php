@@ -4,6 +4,8 @@ require_once("init.php");
 
 $page_title = 'Ошибка';
 
+$bet = null;
+
 $content = include_template('404_content.php', []);
 
 $templete_404 = include_template(
@@ -42,10 +44,6 @@ $new_bet = [];
 $errors = [];
 
 $is_lot_author_other_user = false;
-
-$bets = get_bets($lot_id);
-
-$last_bet = get_last_bet($lot_id);
 
 $is_user_last_bet_other = true;
 
@@ -99,6 +97,10 @@ if (isset($_SESSION['user']['id'])) {
       );
     }
   }
+  
+  $bets = get_bets($lot_id);
+  
+  $last_bet = get_last_bet($lot_id);
   
   //for showing or not block of entering new bet
   //verify if last bet made by other user than this one

@@ -123,13 +123,12 @@ function format_number($number): string {
 /**
  * Fetches all result rows as an associative array by prepared variables
  *
- * @param $link mysqli an object which represents the connection to a MySQL Server.
  * @param $sql string This parameter can include one or more
  *        parameter markers in the SQL statement by embedding
  *        question mark (?) characters at the appropriate positions.
- * @param $data an array of prepared variables for bindig this variables
+ * @param $data array An array of prepared variables for bindig this variables
  *        to a prepared statement
- * @return an array
+ * @return array
  */
 function db_fetch_data($sql, $data = []): array {
   $link = DbConnectionProvider::getConnection();
@@ -149,13 +148,12 @@ function db_fetch_data($sql, $data = []): array {
 /**
  * This function adds new rows
  *
- * @param $link mysqli an object which represents the connection to a MySQL Server.
  * @param $sql string This parameter can include one or more
  *        parameter markers in the SQL statement by embedding
  *        question mark (?) characters at the appropriate positions.
- * @param $data an array of prepared variables for bindig this variables
+ * @param $data array An array of prepared variables for bindig this variables
  *        to a prepared statement
- * @return Returns the auto generated id
+ * @return int Returns the value of the AUTO_INCREMENT field that was updated by the previous query.
  */
 function db_insert_data($sql, $data = []) {
   $link = DbConnectionProvider::getConnection();
@@ -171,13 +169,12 @@ function db_insert_data($sql, $data = []) {
 /**
  * This function update data
  *
- * @param $link mysqli an object which represents the connection to a MySQL Server.
  * @param $sql string This parameter can include one or more
  *        parameter markers in the SQL statement by embedding
  *        question mark (?) characters at the appropriate positions.
- * @param $data an array of prepared variables for bindig this variables
+ * @param $data array An array of prepared variables for bindig this variables
  *        to a prepared statement
- * @return returns TRUE on success or FALSE on failure
+ * @return bool returns TRUE on success or FALSE on failure
  */
 function db_update_data($sql, $data = []) {
   $link = DbConnectionProvider::getConnection();
@@ -190,7 +187,7 @@ function db_update_data($sql, $data = []) {
 /**
  * This function returns array of categories
  *
- * @return array of categories
+ * @return array
  */
 function get_categories(): array {
   $sql = 'SELECT id, title, symbol_code FROM categories';
@@ -201,7 +198,7 @@ function get_categories(): array {
 /**
  * This function returns array of lots without winners
  *
- * @return array of lots
+ * @return array
  */
 function get_lots(): array {
   $sql = 'SELECT lots.id as id,
@@ -220,7 +217,7 @@ function get_lots(): array {
  * like array of its properties
  * if lot exists or null
  *
- * @return array of properties of lot
+ * @return array
  */
 function get_lot($lot_id) {
   $sql = "SELECT lots.id ,
@@ -245,7 +242,7 @@ function get_lot($lot_id) {
 /**
  * This function returns current price of lot by lot's id
  *
- * @return integer
+ * @return int
  */
 function get_current_price($lot_id) {
   $sql = "SELECT MAX(price) AS max_price
@@ -287,10 +284,10 @@ function getUser() {
  */
 function get_bets($lot_id): array {
   $sql = "SELECT rates.id AS rate_id,
-                 rates.user_id as user_id,
-                 rates.dt_add AS data_rate,
-                 rate AS rate ,
-                 users.name as user_name
+            rates.user_id as user_id,
+            rates.dt_add AS data_rate,
+            rate AS rate ,
+            users.name as user_name
           FROM rates
           JOIN users ON users.id = rates.user_id
           WHERE lot_id = ?
@@ -310,8 +307,8 @@ function get_bets($lot_id): array {
  */
 function get_last_bet($lot_id): array {
   $sql = "SELECT rates.id AS rate_id,
-                 rates.user_id as user_id,
-                 rates.dt_add AS data_rate
+            rates.user_id as user_id,
+            rates.dt_add AS data_rate
           FROM rates
           JOIN users ON users.id = rates.user_id
           WHERE lot_id = ?
@@ -329,7 +326,7 @@ function get_last_bet($lot_id): array {
  *
  * @param $time string
  *
- * @return string time
+ * @return string
  */
 function get_time_ago($time) {
   
@@ -375,7 +372,7 @@ function get_time_ago($time) {
  *
  * @param $user_id int
  *
- * @return array of last_bet
+ * @return array
  */
 function get_user_bets($user_id): array {
   $sql = "SELECT rates.id AS rate_id,
@@ -402,9 +399,8 @@ function get_user_bets($user_id): array {
 /**
  * This function returns default img source
  *
- * @return string img source
+ * @return string
  */
 function get_default_image_src() {
   return 'img/no_photo.jpg';
 }
-
