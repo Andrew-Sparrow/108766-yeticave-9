@@ -98,8 +98,6 @@ if (isset($_SESSION['user']['id'])) {
     }
   }
   
-  $bets = get_bets($lot_id);
-  
   $last_bet = get_last_bet($lot_id);
   
   //for showing or not block of entering new bet
@@ -107,6 +105,8 @@ if (isset($_SESSION['user']['id'])) {
   if (isset($last_bet['user_id'])) {
     $is_user_last_bet_other = $user_id != $last_bet['user_id'];
   }
+  
+  $bets = get_bets($lot_id);
 }
 
 //verify if lot's end_date in the future
