@@ -54,8 +54,8 @@
       <!--заполните этот список из массива категорий-->
       <?php foreach($categories as $category): ?>
         <li class="nav__item">
-          <a href="/get_lots_by_category.php?category_id=<?= isset($category['id'])? $category['id'] : '' ?>" >
-            <?= strip_tags($category['title']); ?>
+          <a href="/get_lots_by_category.php?category_id=<?= $category['id'] ?? '' ?>" >
+            <?= isset($category['title']) ? strip_tags($category['title']): ''; ?>
           </a>
         </li>
       <?php endforeach; ?>

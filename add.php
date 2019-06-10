@@ -40,6 +40,14 @@ if (isset($_SESSION['user']['id'])) {
     foreach ($required as $req) {
       trim($lot[$req]);
     }
+
+    if (mb_strlen($lot['title']) > 60 ) {
+      $errors['title'] = 'Введите название не более 60 символов';
+    }
+  
+    if (mb_strlen($lot['description']) > 10000 ) {
+      $errors['description'] = 'Введите описание не более 10000 символов';
+    }
     
     //verifying start price
     if (!is_numeric($lot['start_price'])) {
@@ -47,6 +55,9 @@ if (isset($_SESSION['user']['id'])) {
     }
     elseif ($lot['start_price'] <= 0) {
       $errors['start_price'] = 'Введите число больше нуля';
+    }
+    elseif (mb_strlen(strval($lot['start_price'])) > 10 ) {
+      $errors['start_price'] = 'Введите число не более 10 знаков';
     }
     
     //verifying lot step
@@ -59,7 +70,9 @@ if (isset($_SESSION['user']['id'])) {
     elseif (!ctype_digit($lot['lot_step'])) {
       $errors['lot_step'] = 'Введите целое число';
     }
-    
+    elseif (mb_strlen(strval($lot['lot_step'])) > 6 ) {
+      $errors['lot_step'] = 'Введите число не более 6 знаков';
+    }
     //verifying date of ending
     
     if (empty($errors['end_date']) && !is_date_valid($lot['end_date'])) {

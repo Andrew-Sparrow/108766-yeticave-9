@@ -1,35 +1,13 @@
 <?php
 //showing existing lot
 require_once("init.php");
+require_once("404.php");
 
-$page_title = 'Ошибка';
+isset_get_404('id', $template_404);
 
 $bet = null;
 
-$content = include_template('404_content.php', []);
-
-$templete_404 = include_template(
-  'simple_layout.php',
-  [
-    'page_title' => $page_title,
-    'content'    => $content,
-    'categories' => $categories,
-    'is_auth'    => $is_auth,
-    'user_name'  => $user_name
-  ]
-);
-
-if (!isset($_GET['id'])) {
-  http_response_code(404);
-  print ($templete_404);
-  exit();
-}
-
-if (isset($_GET['id']) && $_GET['id'] === '') {
-  http_response_code(404);
-  print ($templete_404);
-  exit();
-}
+$bets = [];
 
 $lot_id = $_GET['id'];
 
@@ -50,7 +28,7 @@ $is_user_last_bet_other = true;
 //вывод страницы 404, если нет lot'а с таким id
 if (is_null($lot)) {
   http_response_code(404);
-  print ($templete_404);
+  print ($template_404);
   exit();
 }
 
@@ -97,17 +75,16 @@ if (isset($_SESSION['user']['id'])) {
       );
     }
   }
-  
   $last_bet = get_last_bet($lot_id);
-  
-  //for showing or not block of entering new bet
-  //verify if last bet made by other user than this one
+
+//for showing or not block of entering new bet
+//verify if last bet made by other user than this one
   if (isset($last_bet['user_id'])) {
     $is_user_last_bet_other = $user_id != $last_bet['user_id'];
   }
-  
-  $bets = get_bets($lot_id);
 }
+
+$bets = get_bets($lot_id);
 
 //verify if lot's end_date in the future
 $is_end_date_in_future = date_create($lot['end_date']) > new DateTime("now");

@@ -9,11 +9,16 @@ $page_range = '';
 $pages_number = '';
 $cur_page = '';
 $items_on_page = 0;
+$errors = [];
 
 $cur_page = $_GET['page'] ?? 1;
 $items_on_page = 9;
 
 $search_data = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+if (mb_strlen($search_data) > 1000) {
+  $errors['search'] = 'Введите значение не более 1000 символов';
+}
 
 if ($search_data !== '') {
   
@@ -53,7 +58,7 @@ $content = include_template(
     "page_range"           => $page_range,
     "result_search_amount" => $result_search_amount,
     "cur_page"             => $cur_page,
-    "items_on_page"        => $items_on_page
+    "items_on_page"        => $items_on_page,
   ]
 );
 
@@ -64,8 +69,10 @@ $layout = include_template(
     'content'    => $content,
     'categories' => $categories,
     'is_auth'    => $is_auth,
-    'user_name'  => $user_name
+    'user_name'  => $user_name,
+    "errors"     => $errors
   ]
 );
+
 
 print ($layout);
