@@ -7,11 +7,11 @@
   ?>
   <div class="form__item <?= $classname ?>"> <!-- form__item--invalid -->
     <label for="email">E-mail <sup>*</sup></label>
-    <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $value ?>"
+    <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= strip_tags($value) ?>"
       <?= empty($value) || isset($errors['email']) ? 'autofocus': '' ?>>  <!-- I added autofocus for better usability-->
-    <? if (isset($errors['email'])): ?>
+    <?php if (isset($errors['email'])): ?>
       <span class="form__error"><?= $errors['email'] ?></span>
-    <? endif ?>
+    <?php endif ?>
   </div>
   <?php
   $classname = isset($errors['password']) ? 'form__item--invalid' : '';

@@ -1,7 +1,7 @@
 <section class="lot-item container">
   <h2>
     <?php if(isset($lot['title'])): ?>
-      <?= $lot['title']?>
+      <?= strip_tags($lot['title'])?>
     <?php endif;?>
   </h2>
   <div class="lot-item__content">
@@ -13,12 +13,12 @@
       </div>
       <p class="lot-item__category">Категория:
         <?php if(isset($lot['category'])):?>
-          <span><?= $lot['category']?></span>
+          <span><?= strip_tags($lot['category'])?></span>
         <?php endif; ?>
       </p>
       <p class="lot-item__description">
         <?php if(isset($lot['description'])):?>
-          <?= $lot['description']?>
+          <?= strip_tags($lot['description'])?>
         <?php endif; ?>
       </p>
     </div>
@@ -39,7 +39,7 @@
             </span>
             <?php if(isset($lot['id'])): ?>
               <span class="lot-item__cost">
-                <?= format_number_ruble(intval($current_price));?>
+                <?= format_number_ruble(strip_tags($current_price));?>
               </span>
             <?php endif; ?>
           </div>
@@ -47,7 +47,7 @@
             Мин. ставка
             <span>
               <?php if(isset($lot['step'])): ?>
-                <?= format_number(intval($min_rate));?>
+                <?= format_number(strip_tags($min_rate));?>
               <?php endif; ?> р
             </span>
           </div>
@@ -58,11 +58,11 @@
         && $is_user_last_bet_other) : ?>
         <form class="lot-item__form" action="" method="post" autocomplete="off">
           <?php
-          $classname = isset($errors['cost']) ? " form__item--invalid" : "";
+          $classname = isset($errors['cost']) ? "form__item--invalid" : "";
           ?>
           <p class="lot-item__form-item form__item <?=$classname ?>">
             <label for="cost">Ваша ставка</label>
-            <input id="cost" type="text" name="cost" placeholder="<?= format_number(intval($min_rate));?>" autofocus>
+            <input id="cost" type="text" name="cost" placeholder="<?= format_number(strip_tags($min_rate));?>" autofocus>
             <span class="form__error"><?= $errors['cost'] ?? '' ?></span>
           </p>
           <button type="submit" class="button">Сделать ставку</button>
@@ -75,8 +75,8 @@
           <table class="history__list">
             <?php foreach($bets as $bet): ?>
               <tr class="history__item">
-                <td class="history__name"><?= $bet['user_name'] ?? '' ?></td>
-                <td class="history__price"><?= isset($bet['rate']) ? format_number($bet['rate']): '' ?> p </td>
+                <td class="history__name"><?= strip_tags($bet['user_name']) ?? '' ?></td>
+                <td class="history__price"><?= isset($bet['rate']) ? format_number(strip_tags($bet['rate'])): '' ?> p </td>
                 <td class="history__time"><?= isset($bet['data_rate']) ? get_time_ago($bet['data_rate']):'' ?></td>
               </tr>
             <?php endforeach; ?>

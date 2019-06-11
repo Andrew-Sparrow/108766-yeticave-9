@@ -2,6 +2,7 @@
 
 class DbConnectionProvider
 {
+  /** @var null | mysqli */
   protected static $connection;
   
   /**

@@ -66,27 +66,27 @@ if (count($maxRates) > 0) {
     $validator = new EmailValidator();
     
     //validate email
-    if ($validator->isValid(strip_tags($maxRate['user_email']), new RFCValidation())) {
-      if (isset($maxRate['user_name'], $maxRate['lot_title'], $maxRate['lot_id'], $maxRate['user_email'])) {
-        $recipient = [];
-  
-        $recipient[strip_tags($maxRate['user_email'])] = strip_tags($maxRate['user_name']);
-  
-        $message = new Swift_Message();
-        $message->setSubject("Ваша ставка победила");
-        $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
-        $message->setBcc($recipient);
-  
-        $message_content = include_template('email.php', [
-          "winner_name" => strip_tags($maxRate['user_name']),
-          "lot_title"   => strip_tags($maxRate['lot_title']),
-          "lot_id"      => $maxRate['lot_id']
-        ]);
-  
-        $message->setBody($message_content, 'text/html');
-  
-        $result_of_message = $mailer->send($message);
-      }
+  if (isset($maxRate['user_name'], $maxRate['lot_title'], $maxRate['lot_id'], $maxRate['user_email']) &&
+       $validator->isValid(strip_tags($maxRate['user_email']), new RFCValidation())) {
+    
+      $recipient = [];
+
+      $recipient[strip_tags($maxRate['user_email'])] = strip_tags($maxRate['user_name']);
+
+      $message = new Swift_Message();
+      $message->setSubject("Ваша ставка победила");
+      $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
+      $message->setBcc($recipient);
+
+      $message_content = include_template('email.php', [
+        "winner_name" => strip_tags($maxRate['user_name']),
+        "lot_title"   => strip_tags($maxRate['lot_title']),
+        "lot_id"      => $maxRate['lot_id']
+      ]);
+
+      $message->setBody($message_content, 'text/html');
+
+      $result_of_message = $mailer->send($message);
     }
   }
 }

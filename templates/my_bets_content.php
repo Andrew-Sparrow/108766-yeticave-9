@@ -9,11 +9,11 @@
       <tr class="rates__item
          <?php if(isset($bet['winner_id']) && isset($bet['lot_end_date']) ): ?>
            <?= $_SESSION['user']['id'] === $bet['winner_id'] && strtotime($bet['lot_end_date'])<= strtotime('now') ? 'rates__item--win': ''?>
-           <?= $_SESSION['user']['id'] != $bet['winner_id'] && strtotime($bet['lot_end_date'])<= time() ? 'rates__item--end': ''?>
-         <? endif ;?> ">
+           <?= $_SESSION['user']['id'] !== $bet['winner_id'] && strtotime($bet['lot_end_date'])<= time() ? ' rates__item--end': ''?>
+         <?php endif ;?> ">
         <td class="rates__info">
           <div class="rates__img">
-            <img src="<?= $bet['lot_img'] ?? ''?>" width="54" height="40" alt="">
+            <img src="<?= isset($bet['lot_img']) ? strip_tags($bet['lot_img']): ''?>" width="54" height="40" alt="">
           </div>
           <div>
             <h3 class="rates__title">
@@ -24,7 +24,7 @@
             <p>
               <?php if(isset($bet['winner_id'])): ?>
                 <?= $_SESSION['user']['id'] === $bet['winner_id'] ? strip_tags($author_contact): ''?>
-              <? endif ;?>
+              <?php endif ;?>
             </p>
           </div>
         </td>
@@ -34,17 +34,19 @@
         <td class="rates__timer">
           <div class="timer
             <?php if(isset($bet['winner_id'])): ?>
-              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? ' timer--win': ' timer--finishing'?>
-            <? endif ;?>">
+              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? " timer--win": strtotime($bet['lot_end_date'])=== strtotime('tomorrow') ? " timer--finishing" : ''?>
+            <?php endif ;?>">
             <?php if(isset($bet['winner_id'])): ?>
-              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date'] ?? ''?>
-            <? endif ;?>">
+              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date'] ?? '' ?>
+            <?php else :?>
+              <?= $bet['lot_end_date'] ?? ''?>
+            <?php endif ;?>
           </div>
         </td>
         <td class="rates__price">
-          <?php if(isset($bet['winner_id'])): ?>
+          <?php if(isset($bet['rate'])): ?>
             <?= format_number(intval($bet['rate'])) . ' p'?>
-          <? endif ;?>">
+          <?php endif ;?>
         </td>
         <td class="rates__time">
           <?= $bet['data_rate'] ?? ''?>

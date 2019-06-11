@@ -16,10 +16,6 @@ $items_on_page = 9;
 
 $search_data = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-if (mb_strlen($search_data) > 1000) {
-  $errors['search'] = 'Введите значение не более 1000 символов';
-}
-
 if ($search_data !== '') {
   
   $sql = "SELECT COUNT(*) AS cnt

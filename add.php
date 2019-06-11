@@ -10,7 +10,7 @@ if (!isset($_SESSION['user']['id'])) {
 }
 
 if (isset($_SESSION['user']['id'])) {
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $lot = [
       'title'       => $_POST['title'] ?? null,
