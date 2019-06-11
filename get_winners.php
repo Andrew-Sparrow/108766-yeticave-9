@@ -40,13 +40,15 @@ $rates = db_fetch_data($sql_rates);
 
 //find out max rates
 foreach ($rates as $rate) {
-  if (!isset($maxRates[$rate['lot_id']])) {
-    $maxRates[$rate['lot_id']] = $rate;
-    continue;
-  }
+  if(isset($rate['lot_id'])) {
+    if (!isset($maxRates[$rate['lot_id']])) {
+      $maxRates[$rate['lot_id']] = $rate;
+      continue;
+    }
   
-  if ($rate['rate'] > $maxRates[$rate['lot_id']]['rate']) {
-    $maxRates[$rate['lot_id']] = $rate;
+    if ($rate['rate'] > $maxRates[$rate['lot_id']]['rate']) {
+      $maxRates[$rate['lot_id']] = $rate;
+    }
   }
 }
 

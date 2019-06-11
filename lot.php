@@ -80,7 +80,7 @@ if (isset($_SESSION['user']['id'])) {
 //for showing or not block of entering new bet
 //verify if last bet made by other user than this one
   if (isset($last_bet['user_id'])) {
-    $is_user_last_bet_other = $user_id != $last_bet['user_id'];
+    $is_user_last_bet_other = $user_id !== $last_bet['user_id'];
   }
 }
 

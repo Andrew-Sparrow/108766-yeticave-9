@@ -49,6 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (mb_strlen($registration['name']) > 120) {
     $errors['name'] = 'Введите имя не более 120 символов';
   }
+  else {
+    $sql_users_name = "SELECT name
+      FROM users
+      WHERE users.name = ?";
+    
+    $users_name_fetch_data = db_fetch_data($sql_users_name, [$registration['name']] );
+    
+    if(count($users_name_fetch_data) > 0) {
+      $errors['name'] = 'Пользователь с таким именем уже существует';
+    }
+  }
   
   if (mb_strlen($registration['message']) > 2000) {
     $errors['message'] = 'Введите контактные данные не более 2000 символов';

@@ -436,3 +436,13 @@ function isset_get_404($key, $template) {
     get_404($template);
   }
 }
+
+/**
+ * Проверяет если дата равна дате завтра
+ * @param string $date проверяемая дата
+ * @return bool
+ */
+function is_date_equals_tomorrow ($date) {
+  
+  return strtotime(strip_tags($date))=== strtotime('tomorrow');
+}

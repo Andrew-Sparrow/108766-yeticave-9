@@ -34,7 +34,7 @@
         <td class="rates__timer">
           <div class="timer
             <?php if(isset($bet['winner_id'])): ?>
-              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? " timer--win": strtotime($bet['lot_end_date'])=== strtotime('tomorrow') ? " timer--finishing" : ''?>
+              <?= $_SESSION['user']['id'] === $bet['winner_id'] ? " timer--win": is_date_equals_tomorrow($bet['lot_end_date']) ? " timer--finishing" : ''?>
             <?php endif ;?>">
             <?php if(isset($bet['winner_id'])): ?>
               <?= $_SESSION['user']['id'] === $bet['winner_id'] ? 'Ставка выиграла': $bet['lot_end_date'] ?? '' ?>
