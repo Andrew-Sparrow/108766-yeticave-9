@@ -8,8 +8,8 @@
   <div class="form__item <?= $classname; ?>"> <!-- form__item--invalid -->
     <label for="lot-title">Наименование <sup>*</sup></label>
     <input id="lot-title" type="text" name="title"
-           placeholder="Введите наименование лота" value="<?= $value ?>">
-    <span class="form__error"><?= $errors['title'] ?? 'Введите наименование лота' ?></span>
+           placeholder="Введите наименование лота" value="<?= strip_tags($value) ?>">
+    <span class="form__error"><?= $errors['title'] ?? '' ?></span>
   </div>
   <?php
   $classname = isset($errors['category_id']) ? "form__item--invalid" : "";
@@ -19,18 +19,20 @@
     <select id="category" name="category_id">
       <option value=''>Выберите категорию</option>
       <?php foreach ($categories as $category): ?>
-        <option
-          value="<?= ($category['id']) ?>" <?= isset($lot['category_id']) && (int)$lot['category_id'] === (int)$category['id'] ? 'selected' : '' ?> >
-          <?= strip_tags($category['title']); ?>
-        </option>
+        <?php if(isset($category['id'])):?>
+          <option
+            value="<?= ($category['id'] ?? 1) ?>" <?= isset($lot['category_id']) && (int)$lot['category_id'] === (int)$category['id'] ? 'selected' : '' ?> >
+            <?= strip_tags($category['title']); ?>
+          </option>
+        <?php endif ;?>
       <?php endforeach; ?>
     </select>
-    <span class="form__error"><?= $errors['category_id'] ?? 'Выберите категорию' ?></span>
+    <span class="form__error"><?= $errors['category_id'] ?? '' ?></span>
   </div>
 </div>
 <?php
 $classname = isset($errors['description']) ? " form__item--invalid" : "";
-$value = isset($lot['description']) ? $lot['description'] : "";
+$value = $lot['description'] ?? '';
 ?>
 <div class="form__item form__item--wide <?= $classname ?>">
   <label for="id-description">Описание <sup>*</sup></label>
@@ -54,13 +56,14 @@ $classname = isset($errors['lot-picture']) ? "form__item--invalid" : "";
 <div class="form__container-three">
   <?php
   $classname = isset($errors['start_price']) ? " form__item--invalid" : "";
-  $value = isset($lot['start_price']) ? $lot['start_price'] : "";
+  $value = $lot['start_price'] ?? "";
   ?>
   <div class="form__item form__item--small <?= $classname ?>">
     <label for="lot-rate">Начальная цена <sup>*</sup></label>
-    <input id="id-start-price" type="text" name="start_price" value="<?= $value ?>" placeholder="0">
-    <span
-      class="form__error"><?= $errors['start_price'] ?? 'Введите начальную цену' ?></span>
+    <input id="id-start-price" type="text" name="start_price" value="<?= strip_tags($value) ?>" placeholder="0">
+    <span class="form__error">
+      <?= $errors['start_price'] ?? '' ?>
+    </span>
   </div>
   <?php
   $classname = isset($errors['lot_step']) ? " form__item--invalid" : "";
@@ -68,8 +71,8 @@ $classname = isset($errors['lot-picture']) ? "form__item--invalid" : "";
   ?>
   <div class="form__item form__item--small <?= $classname ?>">
     <label for="id-lot-step">Шаг ставки <sup>*</sup></label>
-    <input id="id-lot-step" type="text" name="lot_step" value="<?= $value ?>" placeholder="0">
-    <span class="form__error"><?= $errors['lot_step'] ?? 'Введите шаг ставки' ?></span>
+    <input id="id-lot-step" type="text" name="lot_step" value="<?= strip_tags($value) ?>" placeholder="0">
+    <span class="form__error"><?= $errors['lot_step'] ?? '' ?></span>
   </div>
   <?php
   $classname = isset($errors['end_date']) ? " form__item--invalid" : "";
@@ -77,10 +80,11 @@ $classname = isset($errors['lot-picture']) ? "form__item--invalid" : "";
   ?>
   <div class="form__item <?= $classname ?>">
     <label for="id-lot-date">Дата окончания торгов (дата в формате ГГГГ-ММ-ДД) <sup>*</sup></label>
-    <input class="form__input-date" id="id-lot-date" type="text" name="end_date" value="<?= $value ?>"
+    <input class="form__input-date" id="id-lot-date" type="text" name="end_date" value="<?= strip_tags($value) ?>"
            placeholder="Введите дату в формате ГГГГ-ММ-ДД">
-    <span
-      class="form__error"><?= $errors['end_date'] ?? 'Введите дату окончания торгов' ?></span>
+    <span class="form__error">
+      <?= $errors['end_date'] ?? '' ?>
+    </span>
   </div>
 </div>
 <?php if(count($errors) > 0):?>

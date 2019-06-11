@@ -4,7 +4,6 @@ require_once("init.php");
 $page_title = 'Мои ставки';
 $user_bets = [];
 
-
 if (!isset($_SESSION['user']['id'])) {
   http_response_code(403);
   exit();
@@ -20,7 +19,7 @@ if (isset($_SESSION['user']['id'])) {
 $content = include_template(
   "my_bets_content.php",
   [
-    "user_bets" => $user_bets
+    "user_bets"        => $user_bets
   ]
 );
 
@@ -36,4 +35,3 @@ $layout = include_template(
 );
 
 print ($layout);
-

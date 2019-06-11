@@ -1,11 +1,16 @@
 <?php
-
 require_once("init.php");
+
 $registration = [];
 $errors = [];
 $fetch_data = false;
 $page_title = 'Регистрация';
 $user_name = null;
+
+if (isset($_SESSION['user']['id'])) {
+  header('Location: /');
+  exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
@@ -33,37 +38,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors['email'] = 'Введите корректный емаил';
   }
   
-  if (empty($errors)) {
+  if (mb_strlen($registration['email']) > 120) {
+    $errors['email'] = 'Введите емаил не более 120 символов';
+  }
+  
+  if (mb_strlen($registration['password']) > 120) {
+    $errors['password'] = 'Введите пароль не более 120 символов';
+  }
+  
+  if (mb_strlen($registration['name']) > 120) {
+    $errors['name'] = 'Введите имя не более 120 символов';
+  }
+  else {
+    $sql_users_name = "SELECT name
+      FROM users
+      WHERE users.name = ?";
     
-    $sql = "SELECT id FROM users WHERE email = ?";
-    $user_email = $registration['email'];
+    $users_name_fetch_data = db_fetch_data($sql_users_name, [$registration['name']] );
     
-    $fetch_data = db_fetch_data($sql, [$user_email]);
-    
-    //verifying if there is user with the same id
-    if (count($fetch_data) > 0) {
-      $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
+    if(count($users_name_fetch_data) > 0) {
+      $errors['name'] = 'Пользователь с таким именем уже существует';
     }
-    else {
-      $password = password_hash($registration['password'], PASSWORD_DEFAULT);
-      
-      $sql = "INSERT INTO users (email, name, password, contact)
-        VALUES ( ?, ?, ?, ?)";
-      
-      $new_user = db_insert_data(
-        $sql,
-        [
-          $registration['email'],
-          $registration['name'],
-          $password,
-          $registration['message']
-        ]
-      );
-      
-      if ($new_user) {
-        header("Location: enter.php");
-        exit();
-      }
+  }
+  
+  if (mb_strlen($registration['message']) > 2000) {
+    $errors['message'] = 'Введите контактные данные не более 2000 символов';
+  }
+}
+
+if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+
+  $sql = "SELECT id FROM users WHERE email = ?";
+  $user_email = $registration['email'];
+  
+  $fetch_data = db_fetch_data($sql, [$user_email]);
+  
+  //verifying if there is user with the same id
+  if (count($fetch_data) > 0) {
+    $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
+  }
+  else {
+    $password = password_hash($registration['password'], PASSWORD_DEFAULT);
+    
+    $sql = "INSERT INTO users (email, name, password, contact)
+      VALUES ( ?, ?, ?, ?)";
+    
+    $new_user = db_insert_data(
+      $sql,
+      [
+        $registration['email'],
+        $registration['name'],
+        $password,
+        $registration['message']
+      ]
+    );
+    
+    if ($new_user) {
+      header("Location: enter.php");
+      exit();
     }
   }
 }

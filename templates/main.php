@@ -5,9 +5,9 @@
   <ul class="promo__list">
     <!--заполните этот список из массива категорий-->
     <?php foreach($categories as $category): ?>
-      <li class="promo__item promo__item--<?= strip_tags($category['symbol_code'])?>">
-        <a class="promo__link" href="/get_lots_by_category.php?category_id=<?= isset($category['id'])? $category['id'] : '' ?>" >
-          <?= strip_tags($category['title']); ?>
+      <li class="promo__item promo__item--<?= isset($category['symbol_code']) ? strip_tags($category['symbol_code']):''?>">
+        <a class="promo__link" href="/get_lots_by_category.php?category_id=<?= $category['id'] ?? '' ?>" >
+          <?= isset($category['title']) ? strip_tags($category['title']) : ''; ?>
         </a>
       </li>
     <?php endforeach; ?>

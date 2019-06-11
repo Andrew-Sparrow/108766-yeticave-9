@@ -5,6 +5,11 @@ $enter = [];
 $errors = [];
 $page_title = 'Страница входа';
 
+if (isset($_SESSION['user']['id'])) {
+  header('Location: /');
+  exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   $enter = [
@@ -40,12 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else {
       $errors['password'] = 'Неверный пароль';
     }
-  }
-}
-else {
-  if (isset($_SESSION['user'])) {
-    header('Location: /');
-    exit();
   }
 }
 

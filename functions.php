@@ -2,8 +2,14 @@
 
 class DbConnectionProvider
 {
+  /** @var null | mysqli */
   protected static $connection;
   
+  /**
+   * This function return DB connection
+   *
+   * @return mysqli Returns an object which represents the connection to a MySQL Server.
+   */
   public static function getConnection() {
     if (self::$connection === null) {
       self::$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -68,7 +74,7 @@ function more_than_day($end_bargaining) {
 /**
  * This function returns remained time in "Hours:minutes"
  *
- * @param integer $end_bargaining
+ * @param int $end_bargaining
  * @return string
  *
  */
@@ -105,7 +111,7 @@ function format_number_ruble($number): string {
 }
 
 /**
- * This function returns a formated string with groups of thousands
+ * This function returns a formatted string with groups of thousands
  *
  * @param int $number
  *
@@ -123,10 +129,10 @@ function format_number($number): string {
 /**
  * Fetches all result rows as an associative array by prepared variables
  *
- * @param $sql string This parameter can include one or more
+ * @param string $sql  This parameter can include one or more
  *        parameter markers in the SQL statement by embedding
  *        question mark (?) characters at the appropriate positions.
- * @param $data array An array of prepared variables for bindig this variables
+ * @param array $data An array of prepared variables for bindig this variables
  *        to a prepared statement
  * @return array
  */
@@ -148,10 +154,10 @@ function db_fetch_data($sql, $data = []): array {
 /**
  * This function adds new rows
  *
- * @param $sql string This parameter can include one or more
+ * @param string $sql This parameter can include one or more
  *        parameter markers in the SQL statement by embedding
  *        question mark (?) characters at the appropriate positions.
- * @param $data array An array of prepared variables for bindig this variables
+ * @param array $data An array of prepared variables for bindig this variables
  *        to a prepared statement
  * @return int Returns the value of the AUTO_INCREMENT field that was updated by the previous query.
  */
@@ -169,10 +175,10 @@ function db_insert_data($sql, $data = []) {
 /**
  * This function update data
  *
- * @param $sql string This parameter can include one or more
+ * @param string $sql This parameter can include one or more
  *        parameter markers in the SQL statement by embedding
  *        question mark (?) characters at the appropriate positions.
- * @param $data array An array of prepared variables for bindig this variables
+ * @param array $data  An array of prepared variables for bindig this variables
  *        to a prepared statement
  * @return bool returns TRUE on success or FALSE on failure
  */
@@ -280,7 +286,7 @@ function getUser() {
 /**
  * This function returns array of last_bet for specific lot by lot's id
  *
- * @return array of last_bet
+ * @return array An array of last_bet
  */
 function get_bets($lot_id): array {
   $sql = "SELECT rates.id AS rate_id,
@@ -301,7 +307,7 @@ function get_bets($lot_id): array {
 /**
  * This function returns array of data of last bet for specific lot by lot's id
  *
- * @param $lot_id int
+ * @param int $lot_id
  *
  * @return array
  */
@@ -324,7 +330,7 @@ function get_last_bet($lot_id): array {
  * by using a predefined set of rules which determine
  * the second, minute, hour, day, month and year.
  *
- * @param $time string
+ * @param string $time
  *
  * @return string
  */
@@ -370,7 +376,7 @@ function get_time_ago($time) {
 /**
  * This function returns array of last_bet for specific user by user's id
  *
- * @param $user_id int
+ * @param int $user_id
  *
  * @return array
  */
@@ -403,4 +409,40 @@ function get_user_bets($user_id): array {
  */
 function get_default_image_src() {
   return 'img/no_photo.jpg';
+}
+
+/**
+ * Передает код 404 и выводит станицу с ошибкой 404
+ * @param string $template Итоговый HTML
+ */
+function get_404($template) {
+  http_response_code(404);
+  print ($template);
+  exit();
+}
+
+/**
+ * Передает код 404 и выводит станицу с ошибкой 404
+ * в случае отсутствия ключа или пустого ключа в $_GET
+ * @param string $key проверяемый ключ
+ * @param string $template Итоговый HTML
+ */
+function isset_get_404($key, $template) {
+  if (!isset($_GET[$key])) {
+    get_404($template);
+  }
+  
+  if (isset($_GET[$key]) && $_GET[$key] === '') {
+    get_404($template);
+  }
+}
+
+/**
+ * Проверяет если дата равна дате завтра
+ * @param string $date проверяемая дата
+ * @return bool
+ */
+function is_date_equals_tomorrow ($date) {
+  
+  return strtotime(strip_tags($date))=== strtotime('tomorrow');
 }

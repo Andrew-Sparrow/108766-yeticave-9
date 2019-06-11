@@ -21,7 +21,7 @@
         <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
       </a>
       <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
-        <input type="search" name="search" placeholder="Поиск лота" value="<?= $_GET['search'] ?? ''?>">
+        <input type="search" name="search" placeholder="Поиск лота" value="<?= isset($_GET['search']) ? strip_tags($_GET['search']) : ''?>">
         <input class="main-header__search-btn" type="submit">
       </form>
       <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
@@ -53,7 +53,7 @@
       <ul class="nav__list container">
         <?php foreach($categories as $category): ?>
           <li class="nav__item">
-            <a href="/get_lots_by_category.php?category_id=<?= isset($category['id'])? $category['id'] : '' ?>" >
+            <a href="/get_lots_by_category.php?category_id=<?= $category['id'] ?? '' ?>" >
               <?= strip_tags($category['title']); ?>
             </a>
           </li>
@@ -71,8 +71,8 @@
     <ul class="nav__list container">
       <?php foreach($categories as $category): ?>
         <li class="nav__item">
-          <a href="/get_lots_by_category.php?category_id=<?= isset($category['id'])? $category['id'] : '' ?>" >
-            <?= strip_tags($category['title']); ?>
+          <a href="/get_lots_by_category.php?category_id=<?= $category['id'] ?? '' ?>" >
+            <?= isset($category['title']) ? strip_tags($category['title']):''; ?>
           </a>
         </li>
       <?php endforeach; ?>
