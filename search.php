@@ -17,13 +17,13 @@ $items_on_page = 9;
 $search_data = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 if ($search_data !== '') {
-  
-  $sql = "SELECT COUNT(*) AS cnt
+    
+    $sql = "SELECT COUNT(*) AS cnt
           FROM lots
           WHERE MATCH(lots.title, lots.description) AGAINST(? IN BOOLEAN MODE)
           AND lots.end_date > CURDATE()";
-  
-  $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'] ?? 0;
+    
+    $result_search_amount = db_fetch_data($sql, [$search_data])[0]['cnt'] ?? 0;
 }
 
 $pages_number = ceil($result_search_amount / $items_on_page);
@@ -48,26 +48,26 @@ $sql_set_of_lots = 'SELECT lots.id ,
 $result_set_of_lots = db_fetch_data($sql_set_of_lots, [$search_data]);
 
 $content = include_template(
-  "search_content.php",
-  [
-    "result_set_of_lots"   => $result_set_of_lots,
-    "page_range"           => $page_range,
-    "result_search_amount" => $result_search_amount,
-    "cur_page"             => $cur_page,
-    "items_on_page"        => $items_on_page,
-  ]
+    "search_content.php",
+    [
+        "result_set_of_lots"   => $result_set_of_lots,
+        "page_range"           => $page_range,
+        "result_search_amount" => $result_search_amount,
+        "cur_page"             => $cur_page,
+        "items_on_page"        => $items_on_page,
+    ]
 );
 
 $layout = include_template(
-  'simple_layout.php',
-  [
-    'page_title' => $page_title,
-    'content'    => $content,
-    'categories' => $categories,
-    'is_auth'    => $is_auth,
-    'user_name'  => $user_name,
-    "errors"     => $errors
-  ]
+    'simple_layout.php',
+    [
+        'page_title' => $page_title,
+        'content'    => $content,
+        'categories' => $categories,
+        'is_auth'    => $is_auth,
+        'user_name'  => $user_name,
+        "errors"     => $errors
+    ]
 );
 
 

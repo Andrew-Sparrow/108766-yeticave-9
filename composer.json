@@ -1,8 +1,8 @@
 {
-    "name": "asparrow/yeticave9",
-    "description": "website for e-trading",
-    "type": "project",
-    "require": {
-        "swiftmailer/swiftmailer": "^6.0"
-    }
+  "name": "asparrow/yeticave9",
+  "description": "website for e-trading",
+  "type": "project",
+  "require": {
+    "swiftmailer/swiftmailer": "^6.0"
+  }
 }

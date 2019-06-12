@@ -18,7 +18,7 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{go,py,rb,php}]
+[*.{go, py, rb, php}]
 indent_size = 4
 
 [Makefile]
