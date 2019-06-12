@@ -50,33 +50,42 @@ values (12000, 2, 1),
 
 
 #получить все категории;
-select title from categories ;
+select title
+from categories;
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название,
  стартовую цену, ссылку на изображение, цену, название категории;*/
-SELECT lots.title as lot_title, start_price as start_price , img_src as img_src,
-       MAX(rate) as max_rate, categories.title AS category
+SELECT lots.title       as lot_title,
+       start_price      as start_price,
+       img_src          as img_src,
+       MAX(rate)        as max_rate,
+       categories.title AS category
 FROM lots
-JOIN categories ON lots.category_id = categories.id
-left JOIN rates ON lots.category_id = rates.lot_id
-WHERE lots.winner_id IS NULL AND lots.end_date >= CURDATE()
-GROUP BY  lots.id
+       JOIN categories ON lots.category_id = categories.id
+       left JOIN rates ON lots.category_id = rates.lot_id
+WHERE lots.winner_id IS NULL
+  AND lots.end_date >= CURDATE()
+GROUP BY lots.id
 ORDER BY lots.dt_add desc
 LIMIT 4;
 
 #показать лот по его id. Получите также название категории, к которой принадлежит лот;
-SELECT lots.id AS lot_id , categories.title AS category
+SELECT lots.id AS lot_id, categories.title AS category
 FROM lots
-JOIN categories ON categories.id = lots.category_id;
+       JOIN categories ON categories.id = lots.category_id;
 
 #обновить название лота по его идентификатору;
-update lots set title = 'Ботинки для сноуборда DC Mutiny Charocal' where id = 4;
+update lots
+set title = 'Ботинки для сноуборда DC Mutiny Charocal'
+where id = 4;
 
 #получить список самых свежих ставок для лота по его идентификатору.
-SELECT rates.id AS rate_id, rates.dt_add AS data_rate, rate AS rate  #добавил поле с датой, что бы видно было время ставки
+SELECT rates.id     AS rate_id,
+       rates.dt_add AS data_rate,
+       rate         AS rate #добавил поле с датой, что бы видно было время ставки
 FROM rates
 WHERE lot_id = 1
 ORDER BY rates.dt_add desc
-LIMIT 3 ;
+LIMIT 3;
 
 

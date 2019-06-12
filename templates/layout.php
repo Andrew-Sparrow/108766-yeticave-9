@@ -22,43 +22,43 @@
       <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
       
       <nav class="user-menu">
-        <?php if($is_auth === 1): ?>
-          <div class="user-menu__logged">
-            <p><?= strip_tags($user_name) ?></p>
-            <a class="user-menu__bets" href="my_bets.php">Мои ставки</a>
-            <a class="user-menu__logout" href="/logout.php">Выход</a>
-          </div>
-        <?php else: ?>
-          <ul class="user-menu__list">
-            <li class="user-menu__item">
-              <a href="/registration.php">Регистрация</a>
-            </li>
-            <li class="user-menu__item">
-              <a href="/enter.php">Вход</a>
-            </li>
-          </ul>
-        <?php endif; ?>
+          <?php if ($is_auth === 1): ?>
+            <div class="user-menu__logged">
+              <p><?= strip_tags($user_name) ?></p>
+              <a class="user-menu__bets" href="my_bets.php">Мои ставки</a>
+              <a class="user-menu__logout" href="/logout.php">Выход</a>
+            </div>
+          <?php else: ?>
+            <ul class="user-menu__list">
+              <li class="user-menu__item">
+                <a href="/registration.php">Регистрация</a>
+              </li>
+              <li class="user-menu__item">
+                <a href="/enter.php">Вход</a>
+              </li>
+            </ul>
+          <?php endif; ?>
       </nav>
     </div>
   </header>
   
   <main class="container">
-    <?= $main_content; ?>
+      <?= $main_content; ?>
   </main>
-  
+
 </div>
 
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
       <!--заполните этот список из массива категорий-->
-      <?php foreach($categories as $category): ?>
-        <li class="nav__item">
-          <a href="/get_lots_by_category.php?category_id=<?= $category['id'] ?? '' ?>" >
-            <?= isset($category['title']) ? strip_tags($category['title']): ''; ?>
-          </a>
-        </li>
-      <?php endforeach; ?>
+        <?php foreach ($categories as $category): ?>
+          <li class="nav__item">
+            <a href="/get_lots_by_category.php?category_id=<?= $category['id'] ?? '' ?>">
+                <?= isset($category['title']) ? strip_tags($category['title']) : ''; ?>
+            </a>
+          </li>
+        <?php endforeach; ?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">
