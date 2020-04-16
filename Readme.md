@@ -1,6 +1,6 @@
 # Personal project «YetiCave»
 
-* Student: [Андрей Печёрских](https://up.htmlacademy.ru/php/9/user/108766).
+* Student: [Andrew Pecherskih](https://up.htmlacademy.ru/php/9/user/108766).
 
 In this project were developed next features:
 - Account registration
