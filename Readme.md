@@ -1,4 +1,4 @@
-# Personal project «YetiCave»
+# Personal training project «YetiCave»
 
 * Student: [Andrew Pecherskih](https://up.htmlacademy.ru/php/9/user/108766).
 
