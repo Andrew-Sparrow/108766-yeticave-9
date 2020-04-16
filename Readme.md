@@ -2,7 +2,7 @@
 
 * Student: [Andrew Pecherskih](https://up.htmlacademy.ru/php/9/user/108766).
 
-In this project were developed next features:
+#### In this project were developed and applied next features and technologies:
 - Account registration
 - View a list of active lots
 - Publication of new lot, with some validations (only for registered users)
@@ -13,7 +13,8 @@ In this project were developed next features:
 - Filtering lots by category
 - View lot, with Bid Information, Time remaining until the end of the auction, Bid History.
 - My bids
-
+- MySql
+- vulnerability protection
 
 
 
