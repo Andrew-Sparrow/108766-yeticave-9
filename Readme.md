@@ -13,7 +13,7 @@
 - Filtering lots by category
 - View lot, with Bid Information, Time remaining until the end of the auction, Bid History.
 - My bids
-- MySql
+- MySQL
 - vulnerability protection
 
 
